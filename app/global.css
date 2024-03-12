@@ -1,0 +1,27 @@
+.imageContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.image {
+  display: block;
+  width: 50%;
+  height: auto;
+}
+
+.btn-connect {
+  background-color: yellow;
+  color: black;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+}

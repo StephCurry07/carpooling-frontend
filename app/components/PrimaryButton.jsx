@@ -4,14 +4,10 @@ const PrimaryButton = (props) => {
   const { type, children, ...rest } = props;
 
   if (type === "link") {
-    return (
-      <a {...rest}>
-        {children}
-      </a>
-    );
+    return <a {...rest}>{children}</a>;
   } else {
     return (
-      <button {...rest} >
+      <button className="btn-connect" {...rest}>
         {children}
       </button>
     );
