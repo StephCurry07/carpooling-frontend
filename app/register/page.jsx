@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const registerPage = () => {
   return (
@@ -44,10 +45,11 @@ const registerPage = () => {
           dynamically set ride fare amount from your account. Once completed the
           ride's status can be updated to completed.
         </p>
-
+        <Link href='/register/passenger'>
         <button className="btn-connect" style={{ marginTop: "auto" }}>
           Register as Passenger
         </button>
+        </Link>
       </div>
     </div>
   );

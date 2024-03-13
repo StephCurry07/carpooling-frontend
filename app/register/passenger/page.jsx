@@ -1,6 +1,11 @@
+'use client'
+
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import AvailableRides from './available-rides';
 import styles from '../styles/passenger-registration.module.css';
+import PrimaryButton from '@app/components/PrimaryButton';
 
 const PassengerRegistration = () => {
   const [formData, setFormData] = useState({
@@ -20,12 +25,20 @@ const PassengerRegistration = () => {
       [name]: value,
     });
   };
-
+  
+  const showAvailableRides = () => {
+    return(
+      <div>
+        <AvailableRides />
+      </div>
+    )
+  };
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     // You can perform form validation and submission here
     console.log(formData);
-    router.push('/available-rides');
+    
   };
 
   return (
@@ -87,8 +100,12 @@ const PassengerRegistration = () => {
             className={styles.inputField}
           />
         </div>
-        <button type="submit" className={styles.submitButton}>Submit</button>
+        {/* <Link href='/components/available-rides'> */}
+        <button type="submit" className={styles.submitButton} onClick={showAvailableRides}>Submit</button>
+        {/* </Link> */}
+        
       </form>
+      
     </div>
   );
 };

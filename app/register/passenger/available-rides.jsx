@@ -1,9 +1,11 @@
+'use client'
+
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import styles from '../styles/available-rides.module.css';
 
 const AvailableRides = () => {
-    const router = useRouter();
+  const router = useRouter();
   const [filter, setFilter] = useState({
     time: '',
     source: '',
