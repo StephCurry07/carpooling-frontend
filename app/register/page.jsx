@@ -1,9 +1,16 @@
 import React from "react";
 import Image from "next/image";
+import connectedAccount from "../page";
+import Header from "../components/Header";
 
 const registerPage = () => {
   return (
     <div className="registerContainer">
+      <Header
+        role={"not chosen"}
+        connectedAccount={connectedAccount}
+        balance={50}
+      />
       <div className="register-card">
         <Image
           src="/images/driver.jpg"
@@ -17,9 +24,7 @@ const registerPage = () => {
             paddingLeft: "10px",
             paddingRight: "10px",
           }}
-        >
-          Welcome aboard! As a driver, you're in control of your journey. Register with us and provide essential details about your ride: the starting point and destination, the maximum number of passengers your vehicle can accommodate, and your car's specifications. Once registered, our system automatically calculates the fare based on the distance between your chosen source and destination. As passengers join your ride and mark it as completed, the corresponding fare is credited directly into your account. With our seamless process, you can focus on providing a safe and enjoyable journey while we handle the rest.
-        </p>
+        ></p>
         <button className="btn-connect" style={{ marginTop: "auto" }}>
           Register as Driver
         </button>
