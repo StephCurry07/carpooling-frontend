@@ -1,12 +1,17 @@
-import "../components/Header";
+"use client";
+import React from "react";
+import Header from "../components/Header";
+import { useSearchParams } from "next/navigation";
 
-export default function InternalLayout({ children }) {
+const registerlayout = ({ children }) => {
+  const searchParams = useSearchParams();
+  const connectedAccount = searchParams.get("connectedAccount");
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <Header />
-        {children}
-      </body>
-    </html>
+    <div>
+      <Header connectedAccount={connectedAccount} />
+      {children}
+    </div>
   );
-}
+};
+
+export default registerlayout;

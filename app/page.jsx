@@ -120,7 +120,14 @@ const HomePage = () => {
             started.
           </p>
           <p>Connected Account: {connectedAccount}</p>
-          <Link href="/register" >Register yourselves for the session</Link>
+          <Link
+            href={{
+              pathname: "/register",
+              query: { connectedAccount: connectedAccount },
+            }}
+          >
+            Register yourselves for the session
+          </Link>
         </div>
       )}
     </div>

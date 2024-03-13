@@ -1,15 +1,12 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+
 const RegisterPage = () => {
   return (
     <div className="registerContainer">
-      <Header
-        role={"not chosen"}
-        connectedAccount={connectedAccount}
-        balance={50}
-      />
       <div className="register-card">
         <Image
           src="/images/driver.jpg"
@@ -42,7 +39,11 @@ const RegisterPage = () => {
             paddingRight: "10px",
           }}
         >
-          Registering as a passenger will give you access to a list of all the available rides to choose from along with filters to find the right ride for you. Booking a ride will immediately deduct the dynamically set ride fare amount from your account. Once completed, the ride's status can be updated to completed.
+          Registering as a passenger will give you access to a list of all the
+          available rides to choose from along with filters to find the right
+          ride for you. Booking a ride will immediately deduct the dynamically
+          set ride fare amount from your account. Once completed, the ride's
+          status can be updated to completed.
         </p>
 
         <Link href="/passenger">
