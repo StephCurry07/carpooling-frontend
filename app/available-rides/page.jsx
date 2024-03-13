@@ -250,4 +250,3 @@ return (
 };
 
 export default AvailableRides;
-

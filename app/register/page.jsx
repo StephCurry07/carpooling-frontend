@@ -26,9 +26,11 @@ const RegisterPage = () => {
           distance. Money will be credited into your account once the ride is
           successfully marked completed by each passenger.
         </p>
-        <button className="btn-connect" style={{ marginTop: "auto" }}>
-          Register as Driver
-        </button>
+        <Link href='/register/driver'>
+          <button className="btn-connect" style={{ marginTop: "auto" }}>
+            Register as Driver
+          </button>
+        </Link>
       </div>
       <div className="register-card">
         <Image
@@ -50,9 +52,10 @@ const RegisterPage = () => {
           set ride fare amount from your account. Once completed, the ride's
           status can be updated to completed.
         </p>
-        <button className="btn-connect" style={{ marginTop: "auto" }}>
-          Register as Passenger
-        </button>
+        <Link href='/register/passenger'>
+          <button className="btn-connect" style={{ marginTop: "auto" }}>
+            Register as Passenger
+          </button>
         </Link>
       </div>
     </div>
