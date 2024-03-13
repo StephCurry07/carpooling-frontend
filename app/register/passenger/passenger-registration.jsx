@@ -23,7 +23,6 @@ const PassengerRegistration = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // You can perform form validation and submission here
     console.log(formData);
     router.push('/available-rides');
   };

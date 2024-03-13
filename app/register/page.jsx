@@ -1,9 +1,8 @@
 import React from "react";
 import Image from "next/image";
-import connectedAccount from "../page";
-import Header from "../components/Header";
+import Link from "next/link";
 
-const registerPage = () => {
+const RegisterPage = () => {
   return (
     <div className="registerContainer">
       <Header
@@ -43,19 +42,17 @@ const registerPage = () => {
             paddingRight: "10px",
           }}
         >
-          Registering as a passenger will give you access to list of all the
-          available rides to choose from along with the filters to find the
-          right ride for you. Booking ride will immediately deduct the
-          dynamically set ride fare amount from your account. Once completed the
-          ride's status can be updated to completed.
+          Registering as a passenger will give you access to a list of all the available rides to choose from along with filters to find the right ride for you. Booking a ride will immediately deduct the dynamically set ride fare amount from your account. Once completed, the ride's status can be updated to completed.
         </p>
 
-        <button className="btn-connect" style={{ marginTop: "auto" }}>
-          Register as Passenger
-        </button>
+        <Link href="/passenger">
+          <button className="btn-connect" style={{ marginTop: "auto" }}>
+            Register as Passenger
+          </button>
+        </Link>
       </div>
     </div>
   );
 };
 
-export default registerPage;
+export default RegisterPage;
