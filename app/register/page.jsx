@@ -18,11 +18,7 @@ const registerPage = () => {
             paddingRight: "10px",
           }}
         >
-          Register yourself as a driver and provide details for your ride like
-          source and destination, max passengers, car details etc. The ride fare
-          will be calculated automatically using source and destination
-          distance. Money will be credited into your account once the ride is
-          successfully marked completed by each passenger.
+          Welcome aboard! As a driver, you're in control of your journey. Register with us and provide essential details about your ride: the starting point and destination, the maximum number of passengers your vehicle can accommodate, and your car's specifications. Once registered, our system automatically calculates the fare based on the distance between your chosen source and destination. As passengers join your ride and mark it as completed, the corresponding fare is credited directly into your account. With our seamless process, you can focus on providing a safe and enjoyable journey while we handle the rest.
         </p>
         <button className="btn-connect" style={{ marginTop: "auto" }}>
           Register as Driver
