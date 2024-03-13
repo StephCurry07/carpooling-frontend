@@ -3,7 +3,6 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-
 const RegisterPage = () => {
   return (
     <div className="registerContainer">
@@ -20,7 +19,13 @@ const RegisterPage = () => {
             paddingLeft: "10px",
             paddingRight: "10px",
           }}
-        ></p>
+        >
+          Register yourself as a driver and provide details for your ride like
+          source and destination ,max passengers, car details etc. The ride fare
+          will be calculated automatically using source and destination
+          distance. Money will be credited into your account once the ride is
+          successfully marked completed by each passenger.
+        </p>
         <button className="btn-connect" style={{ marginTop: "auto" }}>
           Register as Driver
         </button>
@@ -45,12 +50,9 @@ const RegisterPage = () => {
           set ride fare amount from your account. Once completed, the ride's
           status can be updated to completed.
         </p>
-
-        <Link href="/passenger">
-          <button className="btn-connect" style={{ marginTop: "auto" }}>
-            Register as Passenger
-          </button>
-        </Link>
+        <button className="btn-connect" style={{ marginTop: "auto" }}>
+          Register as Passenger
+        </button>
       </div>
     </div>
   );
