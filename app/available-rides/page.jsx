@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import styles from "../../styles/available-rides.module.css";
+import styles from "../styles/available-rides.module.css";
 
 const AvailableRides = () => {
   const router = useRouter();

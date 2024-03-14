@@ -36,7 +36,7 @@ const Header = ({ role, balance, connectedAccount }) => {
         <div className="header-ele-links">
           <Link
             href={{
-              pathname: "/register/my-rides",
+              pathname: "/my-rides",
               query: {
                 connectedAccount: connectedAccount,
                 balance: balance,
