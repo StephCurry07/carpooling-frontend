@@ -22,7 +22,7 @@ const Header = ({ role, balance, connectedAccount }) => {
       </div>
       <div className="header-ele">
         <Link
-          href="/"
+          href="/my-rides"
           style={{ color: "yellow", textAlign: "center", fontWeight: "bold" }}
         >
           My rides
