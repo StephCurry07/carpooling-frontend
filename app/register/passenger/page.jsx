@@ -1,19 +1,19 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import AvailableRides from '@app/available-rides/page';
-import styles from '../../styles/passenger-registration.module.css';
-import PrimaryButton from '@app/components/PrimaryButton';
+import React, { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import AvailableRides from "@app/register/available-rides/page";
+import styles from "../../styles/passenger-registration.module.css";
+import PrimaryButton from "@app/components/PrimaryButton";
 
 const PassengerRegistration = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    age: '',
-    gender: '',
-    phone: '',
-    email: '',
+    name: "",
+    age: "",
+    gender: "",
+    phone: "",
+    email: "",
   });
 
   const router = useRouter();
@@ -29,7 +29,6 @@ const PassengerRegistration = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    
   };
   return (
     // <form>
@@ -80,7 +79,7 @@ const PassengerRegistration = () => {
     //           <label htmlFor="photo" className="block text-sm font-medium leading-6 text-gray-900">
     //             Photo
     //           </label>
-              
+
     //         </div>
     //       </div>
     //     </div>
@@ -230,12 +229,13 @@ const PassengerRegistration = () => {
     // </form>
     // );
 
-
     <div className={styles.container}>
       <h1>Register as Passenger</h1>
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
-          <label className={styles.label} htmlFor="name">Name:</label>
+          <label className={styles.label} htmlFor="name">
+            Name:
+          </label>
           <input
             type="text"
             id="name"
@@ -246,7 +246,9 @@ const PassengerRegistration = () => {
           />
         </div>
         <div className={styles.formGroup}>
-          <label className={styles.label} htmlFor="age">Age:</label>
+          <label className={styles.label} htmlFor="age">
+            Age:
+          </label>
           <input
             type="text"
             id="age"
@@ -257,7 +259,9 @@ const PassengerRegistration = () => {
           />
         </div>
         <div className={styles.formGroup}>
-          <label className={styles.label} htmlFor="gender">Gender:</label>
+          <label className={styles.label} htmlFor="gender">
+            Gender:
+          </label>
           <input
             type="text"
             id="gender"
@@ -268,7 +272,9 @@ const PassengerRegistration = () => {
           />
         </div>
         <div className={styles.formGroup}>
-          <label className={styles.label} htmlFor="phone">Phone:</label>
+          <label className={styles.label} htmlFor="phone">
+            Phone:
+          </label>
           <input
             type="text"
             id="phone"
@@ -279,7 +285,9 @@ const PassengerRegistration = () => {
           />
         </div>
         <div className={styles.formGroup}>
-          <label className={styles.label} htmlFor="email">Email:</label>
+          <label className={styles.label} htmlFor="email">
+            Email:
+          </label>
           <input
             type="email"
             id="email"
@@ -289,14 +297,41 @@ const PassengerRegistration = () => {
             className={styles.inputField}
           />
         </div>
-        <Link href='/available-rides'>
-          <button type="submit" className={styles.submitButton}>Submit</button>
+        <Link href="/available-rides">
+          <button type="submit" className={styles.submitButton}>
+            Submit
+          </button>
         </Link>
-        
       </form>
-      
     </div>
   );
 };
 
 export default PassengerRegistration;
+
+// import abi from "../utils/CarPooling.json";
+//import { ethers } from "ethers";
+
+// const [rides, setRides] = useState([]);
+
+// const contractAddress = "0x31Fb98F3FB93daA385Ee2c62dC8DB88d0Fbd8cAF";
+// const contractABI = abi.abi;
+
+// const getRides = async () => {
+//   if (ethereum && connectedAccount) {
+//     const provider = new ethers.BrowserProvider(ethereum);
+//     const signer = await provider.getSigner();
+//     const CarPoolingContract = new ethers.Contract(
+//       contractAddress,
+//       contractABI,
+//       signer
+//     );
+
+//     const rides = await CarPoolingContract.getAllRides();
+//     //console.log("Retrieved Rides...", rides);
+//     setRides(rides);
+//   }
+// };
+// useEffect(() => {
+//   getRides();
+// }, [connectedAccount]);

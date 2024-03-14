@@ -5,21 +5,23 @@ import PrimaryButton from "./components/PrimaryButton";
 import Link from "next/link";
 import Image from "next/image";
 
-// import abi from "../utils/CarPooling.json";
-//import { ethers } from "ethers";
-
 const HomePage = () => {
   const [ethereum, setEthereum] = useState(undefined);
   const [connectedAccount, setConnectedAccount] = useState(undefined);
-  // const [rides, setRides] = useState([]);
+  const [balance, setBalance] = useState(undefined);
 
-  // const contractAddress = "0x31Fb98F3FB93daA385Ee2c62dC8DB88d0Fbd8cAF";
-  // const contractABI = abi.abi;
-
-  const handleAccounts = (accounts) => {
+  const handleAccounts = async (accounts) => {
     if (accounts.length > 0) {
       const account = accounts[0];
       console.log("We have an authorized account: ", account);
+      const balanceHex = await ethereum.request({
+        method: "eth_getBalance",
+        params: [account, "latest"], // 'latest' for latest block
+      });
+
+      // Display balance
+      const balanceDec = parseInt(balanceHex, 16) / Math.pow(10, 18);
+      setBalance(balanceDec.toFixed(4));
       setConnectedAccount(account);
     } else {
       console.log("No authorized accounts yet");
@@ -33,31 +35,12 @@ const HomePage = () => {
 
     if (ethereum) {
       const accounts = await ethereum.request({ method: "eth_accounts" });
-      handleAccounts(accounts);
+      await handleAccounts(accounts);
     }
   };
   useEffect(() => {
     getConnectedAccount();
   }, []);
-
-  // const getRides = async () => {
-  //   if (ethereum && connectedAccount) {
-  //     const provider = new ethers.BrowserProvider(ethereum);
-  //     const signer = await provider.getSigner();
-  //     const CarPoolingContract = new ethers.Contract(
-  //       contractAddress,
-  //       contractABI,
-  //       signer
-  //     );
-
-  //     const rides = await CarPoolingContract.getAllRides();
-  //     //console.log("Retrieved Rides...", rides);
-  //     setRides(rides);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getRides();
-  // }, [connectedAccount]);
 
   const connectAccount = async () => {
     if (!ethereum) {
@@ -66,7 +49,7 @@ const HomePage = () => {
     }
 
     const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-    handleAccounts(accounts);
+    await handleAccounts(accounts);
   };
 
   if (!ethereum) {
@@ -124,7 +107,11 @@ const HomePage = () => {
           <Link
             href={{
               pathname: "/register",
-              query: { connectedAccount: connectedAccount },
+              query: {
+                connectedAccount: connectedAccount,
+                balance: balance,
+                role: "not chosen",
+              },
             }}
           >
             Register yourselves for the session

@@ -2,31 +2,52 @@ import React from "react";
 import Link from "next/link";
 
 const Header = ({ role, balance, connectedAccount }) => {
+  const _connectedAccount =
+    connectedAccount.substring(0, 7) + "..." + connectedAccount.substring(37);
+  const _balance = balance + " ETH";
+
   return (
     <header className="header">
       <div className="header-ele">
-        <Link
-          href="/"
-          style={{ color: "yellow", textAlign: "center", fontWeight: "bold" }}
-        >
-          Home
-        </Link>
+        <div className="header-ele-links">
+          <Link href="/" className="link-text">
+            Home
+          </Link>
+        </div>
       </div>
       <div className="header-ele">
-        <Link
-          href="/register"
-          style={{ color: "yellow", textAlign: "center", fontWeight: "bold" }}
-        >
-          Change Role
-        </Link>
+        <div className="header-ele-links">
+          <Link
+            href={{
+              pathname: "/register",
+              query: {
+                connectedAccount: connectedAccount,
+                balance: balance,
+                role: role,
+              },
+            }}
+            className="link-text"
+          >
+            Change Role
+          </Link>
+        </div>
       </div>
       <div className="header-ele">
-        <Link
-          href="/my-rides"
-          style={{ color: "yellow", textAlign: "center", fontWeight: "bold" }}
-        >
-          My rides
-        </Link>
+        <div className="header-ele-links">
+          <Link
+            href={{
+              pathname: "/register/my-rides",
+              query: {
+                connectedAccount: connectedAccount,
+                balance: balance,
+                role: role,
+              },
+            }}
+            className="link-text"
+          >
+            My rides
+          </Link>
+        </div>
       </div>
       <div className="header-ele">
         <p style={{ color: "yellow", textAlign: "center", fontWeight: "bold" }}>
@@ -35,12 +56,12 @@ const Header = ({ role, balance, connectedAccount }) => {
       </div>
       <div className="header-ele">
         <p style={{ color: "yellow", textAlign: "center", fontWeight: "bold" }}>
-          Balance : {balance}
+          Balance : {_balance}
         </p>
       </div>
       <div className="header-ele">
         <p style={{ color: "yellow", textAlign: "center", fontWeight: "bold" }}>
-          Connected Acc. : {connectedAccount}
+          Connected Acc. : {_connectedAccount}
         </p>
       </div>
     </header>

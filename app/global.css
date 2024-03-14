@@ -5,6 +5,7 @@ body {
 .imageContainer {
   width: 100%;
   height: 100%;
+  margin-top: 100px;
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
@@ -32,6 +33,7 @@ body {
 .registerContainer {
   width: 100%;
   height: 100%;
+  margin-top: 80px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -62,4 +64,26 @@ body {
   height: 60px;
   display: flex;
   align-items: center;
+}
+
+.header-ele-links {
+  padding: 10px;
+  background-color: black;
+  border-radius: 15px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.header-ele-links:hover {
+  background-color: yellow;
+}
+
+.link-text {
+  text-align: center;
+  font-weight: bold;
+  color: yellow;
+  text-decoration: none;
+}
+
+.link-text:hover {
+  color: black;
 }
