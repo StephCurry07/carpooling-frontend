@@ -65,3 +65,25 @@ body {
   display: flex;
   align-items: center;
 }
+
+.header-ele-links {
+  padding: 10px;
+  background-color: black;
+  border-radius: 15px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.header-ele-links:hover {
+  background-color: yellow;
+}
+
+.link-text {
+  text-align: center;
+  font-weight: bold;
+  color: yellow;
+  text-decoration: none;
+}
+
+.link-text:hover {
+  color: black;
+}
