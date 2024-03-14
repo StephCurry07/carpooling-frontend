@@ -5,10 +5,18 @@ import { useSearchParams } from "next/navigation";
 
 const registerlayout = ({ children }) => {
   const searchParams = useSearchParams();
-  const connectedAccount = searchParams.get("connectedAccount");
+  var connectedAccount = searchParams.get("connectedAccount");
+  connectedAccount =
+    connectedAccount.substring(0, 7) + "..." + connectedAccount.substring(37);
+  const balance = searchParams.get("balance") + " ETH";
+  const role = searchParams.get("role");
   return (
     <div>
-      <Header connectedAccount={connectedAccount} />
+      <Header
+        connectedAccount={connectedAccount}
+        balance={balance}
+        role={role}
+      />
       {children}
     </div>
   );

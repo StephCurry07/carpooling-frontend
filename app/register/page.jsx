@@ -2,8 +2,13 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 const RegisterPage = () => {
+  const searchParams = useSearchParams();
+  const connectedAccount = searchParams.get("connectedAccount");
+  const balance = searchParams.get("balance");
+
   return (
     <div className="registerContainer">
       <div className="register-card">
@@ -26,10 +31,18 @@ const RegisterPage = () => {
           distance. Money will be credited into your account once the ride is
           successfully marked completed by each passenger.
         </p>
-        <Link href='/register/driver'>
-          <button className="btn-connect" style={{ marginTop: "auto" }}>
-            Register as Driver
-          </button>
+        <Link
+          href={{
+            pathname: "/register/driver",
+            query: {
+              connectedAccount: connectedAccount,
+              balance: balance,
+              role: "driver",
+            },
+          }}
+          style={{ marginTop: "auto" }}
+        >
+          <button className="btn-connect">Register as Driver</button>
         </Link>
       </div>
       <div className="register-card">
@@ -52,10 +65,18 @@ const RegisterPage = () => {
           set ride fare amount from your account. Once completed, the ride's
           status can be updated to completed.
         </p>
-        <Link href='/register/passenger'>
-          <button className="btn-connect" style={{ marginTop: "auto" }}>
-            Register as Passenger
-          </button>
+        <Link
+          href={{
+            pathname: "/register/passenger",
+            query: {
+              connectedAccount: connectedAccount,
+              balance: balance,
+              role: "passenger",
+            },
+          }}
+          style={{ marginTop: "auto" }}
+        >
+          <button className="btn-connect">Register as Passenger</button>
         </Link>
       </div>
     </div>
