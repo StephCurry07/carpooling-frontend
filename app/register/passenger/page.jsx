@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import AvailableRides from "@app/available-rides/page";
+import AvailableRides from "@app/register/available-rides/page";
 import styles from "../../styles/passenger-registration.module.css";
 import PrimaryButton from "@app/components/PrimaryButton";
 
