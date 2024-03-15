@@ -1,50 +1,53 @@
-'use client'
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import styles from '../styles/available-rides.module.css';
+"use client";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { ethers } from "ethers";
+import MyRidesCard from "@app/components/MyRidesCard";
+import abi from "../../utils/CarPooling.json";
 
 const MyRides = () => {
-  const [bookedRide, setBookedRide] = useState(null);
-  const router = useRouter();
+  const [myRides, setMyRides] = useState([]);
+  const connectedAccount = useSearchParams("connectedAccount");
 
-  useEffect(() => {
-    // Retrieve the booked ride details from local storage
-    const storedBookedRide = localStorage.getItem('bookedRide');
-    if (storedBookedRide) {
-      try {
-        const parsedBookedRide = JSON.parse(storedBookedRide);
-        setBookedRide(parsedBookedRide);
-      } catch (error) {
-        console.error('Error parsing booked ride data:', error);
-        // Handle the error gracefully, e.g., by showing an error message
+  const contractAddress = "0x31Fb98F3FB93daA385Ee2c62dC8DB88d0Fbd8cAF";
+  const contractABI = abi.abi;
+  const getMyRides = async () => {
+    if (window.ethereum && connectedAccount) {
+      const provider = new ethers.BrowserProvider(ethereum);
+      const signer = await provider.getSigner();
+      const CarPoolingContract = new ethers.Contract(
+        contractAddress,
+        contractABI,
+        signer
+      );
+
+      const rides = await CarPoolingContract.getUserRides();
+      let rideConverted = [];
+      for (var i = 0; i < rides[0].length; i++) {
+        const ride = {
+          driver: rides[0][i],
+          passengers: rides[1][i],
+          mPassengers: rides[2][i],
+          rideFare: rides[3][i],
+          rideId: rides[4][i],
+          time: rides[5][i],
+          tDetails: rides[6][i],
+        };
+        rideConverted.push(ride);
       }
+      setMyRides(rideConverted);
     }
-  }, []);
-
-  const handleCancelRide = () => {
-    // Clear the booked ride data from local storage
-    localStorage.removeItem('bookedRide');
-    // Update the state to reflect the cancellation
-    setBookedRide(null);
-    // Redirect to the ride-booked page
-    router.push('/available-rides');
   };
+  useEffect(() => {
+    getMyRides();
+  }, [connectedAccount]);
 
   return (
-    <div className={styles.container}>
-      <h1>My Rides</h1>
-      {bookedRide && (
-        <div>
-          <h2>Booked Ride Details</h2>
-          <p>Driver: {bookedRide.driverName}</p>
-          <p>Car: {bookedRide.car}</p>
-          <p>Source: {bookedRide.source}</p>
-          <p>Destination: {bookedRide.destination}</p>
-          <p>Start Time: {bookedRide.startTime}</p>
-          {/* Add more details as needed */}
-          <button onClick={handleCancelRide}>Cancel Ride</button>
-        </div>
-      )}
+    <div>
+      My rides: <br />
+      {myRides.map((ride) => (
+        <MyRidesCard key = {ride.rideId} ride={ride} />
+      ))}
     </div>
   );
 };
