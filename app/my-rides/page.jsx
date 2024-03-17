@@ -11,7 +11,7 @@ const MyRides = () => {
   const connectedAccount = searchParams.get("connectedAccount");
   const role = searchParams.get("role");
 
-  const contractAddress = "0x31Fb98F3FB93daA385Ee2c62dC8DB88d0Fbd8cAF";
+  const contractAddress = "0x561002b9991332045E465440b981a32914F935c9";
   const contractABI = abi.abi;
   const getMyRides = async () => {
     if (window.ethereum && connectedAccount) {
@@ -38,21 +38,21 @@ const MyRides = () => {
         rideConverted.push(ride);
       }
 
-      let rideFiltered = [];
+      // let rideFiltered = [];
 
-      if (role === "driver") {
-        rideFiltered = rideConverted.filter(
-          (ride) => ride.driver === connectedAccount
-        );
-      } else {
-        rideFiltered = rideConverted.filter((ride) =>
-          connectedAccount.match(ride.driver)
-        );
-      }
+      // if (role === "driver") {
+      //   rideFiltered = rideConverted.filter(
+      //     (ride) => ride.driver === connectedAccount
+      //   );
+      // } else {
+      //   rideFiltered = rideConverted.filter((ride) =>
+      //     connectedAccount.match(ride.driver)
+      //   );
+      // }
 
-      console.log(rideFiltered);
+      // console.log(rideFiltered);
 
-      setMyRides(rideFiltered);
+      setMyRides(rideConverted);
     }
   };
   useEffect(() => {
