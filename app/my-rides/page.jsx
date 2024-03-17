@@ -7,7 +7,9 @@ import abi from "../../utils/CarPooling.json";
 
 const MyRides = () => {
   const [myRides, setMyRides] = useState([]);
-  const connectedAccount = useSearchParams("connectedAccount");
+  const searchParams = useSearchParams();
+  const connectedAccount = searchParams.get("connectedAccount");
+  const role = searchParams.get("role");
 
   const contractAddress = "0x31Fb98F3FB93daA385Ee2c62dC8DB88d0Fbd8cAF";
   const contractABI = abi.abi;
@@ -35,7 +37,22 @@ const MyRides = () => {
         };
         rideConverted.push(ride);
       }
-      setMyRides(rideConverted);
+
+      let rideFiltered = [];
+
+      if (role === "driver") {
+        rideFiltered = rideConverted.filter(
+          (ride) => ride.driver === connectedAccount
+        );
+      } else {
+        rideFiltered = rideConverted.filter((ride) =>
+          connectedAccount.match(ride.driver)
+        );
+      }
+
+      console.log(rideFiltered);
+
+      setMyRides(rideFiltered);
     }
   };
   useEffect(() => {
@@ -45,9 +62,11 @@ const MyRides = () => {
   return (
     <div>
       My rides: <br />
-      {myRides.map((ride) => (
-        <MyRidesCard key = {ride.rideId} ride={ride} />
-      ))}
+      {role === "not chosen" ? (
+        <h1>Please either register as a driver or a passenger first</h1>
+      ) : (
+        myRides.map((ride) => <MyRidesCard key={ride.rideId} ride={ride} />)
+      )}
     </div>
   );
 };
