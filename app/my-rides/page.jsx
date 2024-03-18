@@ -55,17 +55,36 @@ const MyRides = () => {
       setMyRides(rideConverted);
     }
   };
+
+  const cancelRide = async (rideId) => {
+    const provider = new ethers.BrowserProvider(ethereum);
+    const signer = await provider.getSigner();
+    const CarPoolingContract = new ethers.Contract(
+      contractAddress,
+      contractABI,
+      signer
+    );
+    console.log(rideId);
+    const txn = await CarPoolingContract.cancelRide(rideId);
+    console.log(txn.toString());
+  };
+
+  const updateStatus = async (rideId) => {};
+
+  const rideCompleted = async (rideId) => {};
   useEffect(() => {
     getMyRides();
   }, [connectedAccount]);
 
   return (
     <div>
-      My rides: <br />
+      <h1>My rides:</h1> <br />
       {role === "not chosen" ? (
         <h1>Please either register as a driver or a passenger first</h1>
       ) : (
-        myRides.map((ride) => <MyRidesCard key={ride.rideId} ride={ride} />)
+        myRides.map((ride) => (
+          <MyRidesCard key={ride.rideId} ride={ride} cancelRide={cancelRide} />
+        ))
       )}
     </div>
   );
