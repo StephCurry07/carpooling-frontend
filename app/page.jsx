@@ -44,7 +44,6 @@ const HomePage = () => {
 
   const InstallMetaMask = () => {
     const handleInstallClick = () => {
-      // Implement logic to redirect users to MetaMask installation page
       window.open('https://metamask.io/download.html', '_blank');
     };
   
