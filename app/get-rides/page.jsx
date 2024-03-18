@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import GetRidesCard from "@app/components/GetRidesCard";
+import GetRidesCard from "@components/GetRidesCard";
 import abi from "../../utils/CarPooling.json";
 import styles from "../styles/get-rides.module.css";
 
