@@ -42,6 +42,26 @@ const HomePage = () => {
     getConnectedAccount();
   }, []);
 
+  const InstallMetaMask = () => {
+    const handleInstallClick = () => {
+      // Implement logic to redirect users to MetaMask installation page
+      window.open('https://metamask.io/download.html', '_blank');
+    };
+  
+    return (
+      <div className="metaChecker">
+      <p className="metaInstallText">Please install MetaMask to connect to this site</p>
+      <button className="btn-install"
+        onClick={handleInstallClick}
+        onMouseEnter={(e) => e.target.style.backgroundColor = 'blue'}
+        onMouseLeave={(e) => e.target.style.backgroundColor = '#4CAF50'}
+      >
+        Install MetaMask
+      </button>
+    </div>
+    );
+  };
+
   const connectAccount = async () => {
     if (!ethereum) {
       alert("MetaMask is required to connect an account");
@@ -53,7 +73,7 @@ const HomePage = () => {
   };
 
   if (!ethereum) {
-    return <p>Please install MetaMask to connect to this site</p>;
+    return <InstallMetaMask />;
   }
 
   return (
