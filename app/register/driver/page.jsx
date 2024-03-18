@@ -31,13 +31,22 @@ const DriverRegistration = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
     localStorage.setItem('formData', JSON.stringify(formData));
-    window.location.href = '/create-ride';
+    router.push({
+      pathname: '/create-ride',
+      
+    });
   };
 
-  return (
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   console.log(formData);
+    
+  //   localStorage.setItem('formData', JSON.stringify(formData));
+  //   window.location.href = '/create-ride';
+  // };
 
+  return (
     <div className={styles.container} >
       <h1>Register as Driver</h1>
       <form onSubmit={handleSubmit}>
@@ -45,56 +54,51 @@ const DriverRegistration = () => {
           <legend>Your details:</legend>
 
           <div className={styles.formGroup}>
-            <label className={styles.label} >Name:</label>
+            <label className={styles.label}>Name:</label>
             <input
               type="text"
               id="name"
               name="name"
-              value={formData.name}
               onChange={handleChange}
               className={styles.inputField}
             />
           </div>
           <div className={styles.formGroup}>
-            <label className={styles.label} htmlFor="age">Age:</label>
+            <label className={styles.label}>Age:</label>
             <input
               type="text"
               id="age"
               name="age"
-              value={formData.age}
               onChange={handleChange}
               className={styles.inputField}
             />
           </div>
           <div className={styles.formGroup}>
-            <label className={styles.label} htmlFor="gender">Gender:</label>
+            <label className={styles.label}>Gender:</label>
             <input
               type="text"
               id="gender"
               name="gender"
-              value={formData.gender}
               onChange={handleChange}
               className={styles.inputField}
             />
           </div>
           <div className={styles.formGroup}>
-            <label className={styles.label} htmlFor="phone">Phone:</label>
+            <label className={styles.label}>Phone:</label>
             <input
               type="text"
               id="phone"
               name="phone"
-              value={formData.phone}
               onChange={handleChange}
               className={styles.inputField}
             />
           </div>
           <div className={styles.formGroup}>
-            <label className={styles.label} htmlFor="email">Email:</label>
+            <label className={styles.label}>Email:</label>
             <input
               type="email"
               id="email"
               name="email"
-              value={formData.email}
               onChange={handleChange}
               className={styles.inputField}
             />
@@ -110,7 +114,6 @@ const DriverRegistration = () => {
               type="text"
               id="car"
               name="carName"
-              value={formData.carName}
               onChange={handleChange}
               className={styles.inputField}
             />
@@ -121,7 +124,6 @@ const DriverRegistration = () => {
               type="text"
               id="cap"
               name="carCapacity"
-              value={formData.carCapacity}
               onChange={handleChange}
               className={styles.inputField}
             />
@@ -135,6 +137,7 @@ const DriverRegistration = () => {
               connectedAccount: connectedAccount,
               balance: balance,
               role: "driver",
+              formData: JSON.stringify(formData),
             },
           }}
           style={{ marginTop: "auto" }}

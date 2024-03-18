@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { ethers } from "ethers";
-import MyRidesCard from "@app/components/MyRidesCard";
+import MyRidesCard from "@components/MyRidesCard";
 import abi from "../../utils/CarPooling.json";
 
 const MyRides = () => {
