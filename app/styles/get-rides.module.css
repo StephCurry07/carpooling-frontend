@@ -1,0 +1,40 @@
+
+.pageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  padding: 20px;
+}
+
+.card {
+  background-color: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px;
+  width: calc(33.33% - 20px); /* Adjust as needed */
+  max-width: 400px; /* Adjust as needed */
+  box-sizing: border-box; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.background {
+  background-color: #f0f0f0;
+}
+
+.bookButton {
+  padding: 10px 20px;
+  background-color: #fbff00;
+  color: rgb(0, 0, 0);
+  border: 1px solid #000000;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px; /* Add some spacing between button and other content */
+}
