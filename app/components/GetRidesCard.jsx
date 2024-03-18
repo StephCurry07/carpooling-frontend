@@ -1,10 +1,8 @@
-// getRidesCard.jsx
+
 import React from "react";
 import styles from "../styles/get-rides.module.css";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-
-
 
 const GetRidesCard = ({ ride }) => {
   const tripDetailsArray = ride.tDetails.split(" + ");
