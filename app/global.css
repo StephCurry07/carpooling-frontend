@@ -87,3 +87,29 @@ body {
 .link-text:hover {
   color: black;
 }
+
+
+.metaChecker {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 20px;
+  color: #333;
+}
+
+.metaInstallText{
+  margin-bottom: 20px;
+  font-family: Arial, sans-serif;
+  color: red;
+  font-variant: small-caps;
+}
+
+.btn-install {
+  padding: 10px 10px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
