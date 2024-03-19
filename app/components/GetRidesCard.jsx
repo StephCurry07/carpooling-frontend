@@ -1,57 +1,34 @@
 
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { ethers } from "ethers";
 import styles from "../styles/get-rides.module.css";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import abi from "../../utils/CarPooling.json";
+
 
 const GetRidesCard = ({ ride }) => {
-  const tripDetailsArray = ride.tDetails.split(" + ");
+  const [locations, carDetails, driverDetails, pickPoint, distance, gasPrice] = ride.tDetails.toString().split("+");
   const searchParams = useSearchParams();
   const connectedAccount = searchParams.get("connectedAccount");
   const balance = searchParams.get("balance");
-
-  let source = "";
-  let destination = "";
-  let carDetails = "";
-  let driverDetails = "";
-  let pickUpPoint = "";
-  let distance = "";
-  let gasPrice = "";
-
-  tripDetailsArray.forEach((item) => {
-    const [key, value] = item.split(": ");
-    switch (key) {
-      case "Source":
-        source = value;
-        break;
-      case "Destination":
-        destination = value;
-        break;
-      case "Car Details":
-        carDetails = value;
-        break;
-      case "Driver Details":
-        driverDetails = value;
-        break;
-      case "Pick up point":
-        pickUpPoint = value;
-        break;
-      case "Distance":
-        distance = value;
-        break;
-      case "Gas Price":
-        gasPrice = value;
-        break;
-      default:
-        break;
-    }
-  });
-
-  const handleBookRide = () => {
-    // Implement booking logic here
-    alert("Booking ride with ID: " + ride.rideId);
+  const contractAddress = "0x561002b9991332045E465440b981a32914F935c9";
+  const contractABI = abi.abi;
+  
+  const BookRide = async(rideId) => {
+    const provider = new ethers.BrowserProvider(ethereum);
+    const signer = await provider.getSigner();
+    const CarPoolingContract = new ethers.Contract(
+      contractAddress,
+      contractABI,
+      signer
+    );
+    console.log(rideId);
+    const txn = await CarPoolingContract.bookRide(rideId);
+    console.log(txn.toString());
   };
-
+  
   return (
     <div className={styles.card}>
       <p>Ride Id: {ride.rideId.toString()}</p>
@@ -59,13 +36,12 @@ const GetRidesCard = ({ ride }) => {
         <li>Ride Fare: {ride.rideFare.toString()}</li>
         <li>Max Passengers: {ride.mPassengers.toString()}</li>
         <li>Current Passengers: {ride.passengers.toString()}</li>
-        <li>Source: {source}</li>
-        <li>Destination: {destination}</li>
-        <li>Car Details: {carDetails}</li>
-        <li>Driver Details: {driverDetails}</li>
-        <li>Pick Up Point: {pickUpPoint}</li>
-        <li>Distance: {distance}</li>
-        <li>Gas Price: {gasPrice}</li>
+        <li>Locations: {locations}</li>
+        <li>{carDetails}</li>
+        <li>{driverDetails}</li>
+        <li>{pickPoint}</li>
+        <li>{distance}</li>
+        <li>{gasPrice}</li>
         </ul>
         <Link
           href={{
@@ -77,7 +53,7 @@ const GetRidesCard = ({ ride }) => {
             },
           }}
         >
-          <button className={styles.bookButton} onClick={handleBookRide}>Book</button>
+          <button className={styles.bookButton} onClick={BookRide(ride.rideId)}>Book</button>
         </Link>
     </div>
   );
