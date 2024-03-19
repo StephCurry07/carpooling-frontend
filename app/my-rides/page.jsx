@@ -11,11 +11,11 @@ const MyRides = () => {
   const connectedAccount = searchParams.get("connectedAccount");
   const role = searchParams.get("role");
 
-  const contractAddress = "0x561002b9991332045E465440b981a32914F935c9";
+  const contractAddress = "0xa5AaBcFF6b8F1Ee83e4d6Bbfa3a285d04f8e2c29";
   const contractABI = abi.abi;
   const getMyRides = async () => {
     if (window.ethereum && connectedAccount) {
-      const provider = new ethers.BrowserProvider(ethereum);
+      const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const CarPoolingContract = new ethers.Contract(
         contractAddress,
@@ -57,7 +57,7 @@ const MyRides = () => {
   };
 
   const cancelRide = async (rideId) => {
-    const provider = new ethers.BrowserProvider(ethereum);
+    const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
     const CarPoolingContract = new ethers.Contract(
       contractAddress,
@@ -69,12 +69,27 @@ const MyRides = () => {
     console.log(txn.toString());
   };
 
-  const updateStatus = async (rideId) => {};
-
-  const rideCompleted = async (rideId) => {};
   useEffect(() => {
     getMyRides();
   }, [connectedAccount]);
+
+  const completed = async (rideId) => {
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    const CarPoolingContract = new ethers.Contract(
+      contractAddress,
+      contractABI,
+      signer
+    );
+    console.log(rideId);
+
+    if (role === "driver") {
+      const txn = await CarPoolingContract.rideCompleted(rideId);
+      console.log(txn);
+    } else {
+      const txn = await CarPoolingContract.updateStatus(rideId);
+    }
+  };
 
   return (
     <div>
@@ -83,7 +98,12 @@ const MyRides = () => {
         <h1>Please either register as a driver or a passenger first</h1>
       ) : (
         myRides.map((ride) => (
-          <MyRidesCard key={ride.rideId} ride={ride} cancelRide={cancelRide} />
+          <MyRidesCard
+            key={ride.rideId}
+            ride={ride}
+            cancelRide={cancelRide}
+            completed={completed}
+          />
         ))
       )}
     </div>

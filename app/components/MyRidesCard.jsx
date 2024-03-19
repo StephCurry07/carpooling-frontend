@@ -1,12 +1,16 @@
 import React from "react";
 import "../styles/my-rides-card.css";
 
-const MyRidesCard = ({ ride, cancelRide }) => {
-  const [locations, carDetails, driverDetails, pickPoint, distance, gasPrice] =
+const MyRidesCard = ({ ride, cancelRide, completed }) => {
+  const [source, destination, carDetails, driverDetails, pickPoint, distance, gasPrice] =
     ride.tDetails.toString().split("+");
 
   const cancelRideHandler = async () => {
     await cancelRide(ride.rideId);
+  };
+
+  const completedHandler = async () => {
+    await completed(ride.rideId);
   };
 
   return (
@@ -24,14 +28,18 @@ const MyRidesCard = ({ ride, cancelRide }) => {
         <p>{gasPrice}</p>
       </div>
       <div className="card-item">
-        <p>{locations}</p>
-        <p>{pickPoint}</p>
+        <p>{source}</p>
+        <p>{destination}</p>
       </div>
       <div className="card-item">
         <p>{driverDetails}</p>
         <p>{carDetails}</p>
       </div>
+      <div className="card-item">
+        <p>{pickPoint}</p>
+      </div>
       <button onClick={cancelRideHandler}>Cancel Ride</button>
+      <button onClick={completedHandler}>Completed</button>
     </div>
   );
 };
