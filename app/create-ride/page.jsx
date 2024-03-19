@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import styles from '../styles/user-registration.module.css'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import DateTimePicker from '@/components/DateTimePicker'
+import DateTimePicker from '@app/components/DateTimePicker'
 
 const createRide = () => {
     const [formData, setFormData] = useState('');
