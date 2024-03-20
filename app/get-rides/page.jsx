@@ -72,10 +72,21 @@ const GetRides = () => {
     setFilteredRides(filtered);
   }, [sourceFilter, destinationFilter, allRides]);
 
-
+  const bookRide = async (rideId,rideFare) => {
+    const provider = new ethers.BrowserProvider(ethereum);
+    const signer = await provider.getSigner();
+    const CarPoolingContract = new ethers.Contract(
+      contractAddress,
+      contractABI,
+      signer
+    );
+    console.log(rideId);
+    const value = rideFare.toString();
+    const txn = await CarPoolingContract.bookRide(rideId, { value });
+    console.log(txn.toString());
+  };
   return (
     <div className={styles.pageContainer}>
-      {/* Filter inputs */}
       <div className={styles.filterContainer}>
         <div>
           <label htmlFor="sourceFilter">Source:</label>
@@ -114,11 +125,12 @@ const GetRides = () => {
           </select>
         </div>
       </div>
-
-      {/* Render filtered rides */}
       <div className={styles.cardContainer}>
         {filteredRides.map((ride) => (
-          <GetRidesCard key={ride.rideId} ride={ride} />
+          <GetRidesCard 
+          key={ride.rideId} 
+          ride={ride}
+          bookRide = {bookRide} />
         ))}
       </div>
     </div>

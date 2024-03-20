@@ -1,35 +1,20 @@
 
 "use client";
-import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { ethers } from "ethers";
-import { parseEther } from "ethers/utils";
 import styles from "../styles/get-rides.module.css";
 import Link from "next/link";
-import abi from "../../utils/CarPooling.json";
 
 
-const GetRidesCard = ({ ride }) => {
-  const [locations, carDetails, driverDetails, pickPoint, distance, gasPrice] = ride.tDetails.toString().split("+");
+const GetRidesCard = ({ ride, bookRide }) => {
+  const [source, destination, carDetails, driverDetails, pickPoint, distance, gasPrice] = ride.tDetails.toString().split("+");
   const searchParams = useSearchParams();
   const connectedAccount = searchParams.get("connectedAccount");
   const balance = searchParams.get("balance");
-  const contractAddress = "0xa5AaBcFF6b8F1Ee83e4d6Bbfa3a285d04f8e2c29";
-  const contractABI = abi.abi;
-  
-  const BookRide = async(rideId) => {
-    const provider = new ethers.BrowserProvider(ethereum);
-    const signer = await provider.getSigner();
-    const CarPoolingContract = new ethers.Contract(
-      contractAddress,
-      contractABI,
-      signer
-    );
-    console.log(rideId);
-    const value = parseEther("0.01");
-    const txn = await CarPoolingContract.bookRide(rideId, { value });
-    console.log(txn.toString());
+
+  const BookRideHandler = async () => {
+    await bookRide(ride.rideId,  ride.rideFare.toString() );
   };
+  
   
   return (
     <div className={styles.card}>
@@ -38,7 +23,8 @@ const GetRidesCard = ({ ride }) => {
         <li>Ride Fare: {ride.rideFare.toString()}</li>
         <li>Max Passengers: {ride.mPassengers.toString()}</li>
         <li>Current Passengers: {ride.passengers.toString()}</li>
-        <li>Locations: {locations}</li>
+        <li>{source}</li>
+        <li>{destination}</li>
         <li>{carDetails}</li>
         <li>{driverDetails}</li>
         <li>{pickPoint}</li>
@@ -55,7 +41,7 @@ const GetRidesCard = ({ ride }) => {
             },
           }}
         >
-          <button className={styles.bookButton} onClick={BookRide(ride.rideId)}>Book</button>
+          <button className={styles.bookButton} onClick={BookRideHandler(ride.rideId)}>Book</button>
         </Link>
     </div>
   );
