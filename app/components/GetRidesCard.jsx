@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { ethers } from "ethers";
+import { parseEther } from "ethers/utils";
 import styles from "../styles/get-rides.module.css";
 import Link from "next/link";
 import abi from "../../utils/CarPooling.json";
@@ -13,7 +14,7 @@ const GetRidesCard = ({ ride }) => {
   const searchParams = useSearchParams();
   const connectedAccount = searchParams.get("connectedAccount");
   const balance = searchParams.get("balance");
-  const contractAddress = "0x561002b9991332045E465440b981a32914F935c9";
+  const contractAddress = "0xa5AaBcFF6b8F1Ee83e4d6Bbfa3a285d04f8e2c29";
   const contractABI = abi.abi;
   
   const BookRide = async(rideId) => {
@@ -25,7 +26,8 @@ const GetRidesCard = ({ ride }) => {
       signer
     );
     console.log(rideId);
-    const txn = await CarPoolingContract.bookRide(rideId);
+    const value = parseEther("0.1");
+    const txn = await CarPoolingContract.bookRide(rideId, { value });
     console.log(txn.toString());
   };
   

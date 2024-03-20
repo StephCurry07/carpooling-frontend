@@ -10,7 +10,7 @@ const GetRides = () => {
   const [filteredRides, setFilteredRides] = useState([]);
   const [sourceFilter, setSourceFilter] = useState("");
   const [destinationFilter, setDestinationFilter] = useState("");
-  const contractAddress = "0x561002b9991332045E465440b981a32914F935c9";
+  const contractAddress = "0xa5AaBcFF6b8F1Ee83e4d6Bbfa3a285d04f8e2c29";
   const contractABI = abi.abi;
 
   const getAllRides = async () => {
