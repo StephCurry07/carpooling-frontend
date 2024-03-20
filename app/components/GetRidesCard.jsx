@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
@@ -8,16 +7,16 @@ import styles from "../styles/get-rides.module.css";
 import Link from "next/link";
 import abi from "../../utils/CarPooling.json";
 
-
 const GetRidesCard = ({ ride }) => {
-  const [locations, carDetails, driverDetails, pickPoint, distance, gasPrice] = ride.tDetails.toString().split("+");
+  const [locations, carDetails, driverDetails, pickPoint, distance, gasPrice] =
+    ride.tDetails.toString().split("+");
   const searchParams = useSearchParams();
   const connectedAccount = searchParams.get("connectedAccount");
   const balance = searchParams.get("balance");
-  const contractAddress = "0xa5AaBcFF6b8F1Ee83e4d6Bbfa3a285d04f8e2c29";
+  const contractAddress = abi.contractAddress;
   const contractABI = abi.abi;
-  
-  const BookRide = async(rideId) => {
+
+  const BookRide = async (rideId) => {
     const provider = new ethers.BrowserProvider(ethereum);
     const signer = await provider.getSigner();
     const CarPoolingContract = new ethers.Contract(
@@ -30,7 +29,7 @@ const GetRidesCard = ({ ride }) => {
     const txn = await CarPoolingContract.bookRide(rideId, { value });
     console.log(txn.toString());
   };
-  
+
   return (
     <div className={styles.card}>
       <p>Ride Id: {ride.rideId.toString()}</p>
@@ -44,19 +43,21 @@ const GetRidesCard = ({ ride }) => {
         <li>{pickPoint}</li>
         <li>{distance}</li>
         <li>{gasPrice}</li>
-        </ul>
-        <Link
-          href={{
-            pathname: "/ride-booked",
-            query: {
-              connectedAccount: connectedAccount,
-              balance: balance,
-              role: "passenger",
-            },
-          }}
-        >
-          <button className={styles.bookButton} onClick={BookRide(ride.rideId)}>Book</button>
-        </Link>
+      </ul>
+      <Link
+        href={{
+          pathname: "/ride-booked",
+          query: {
+            connectedAccount: connectedAccount,
+            balance: balance,
+            role: "passenger",
+          },
+        }}
+      >
+        <button className={styles.bookButton} onClick={BookRide(ride.rideId)}>
+          Book
+        </button>
+      </Link>
     </div>
   );
 };

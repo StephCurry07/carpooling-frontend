@@ -10,7 +10,7 @@ const GetRides = () => {
   const [filteredRides, setFilteredRides] = useState([]);
   const [sourceFilter, setSourceFilter] = useState("");
   const [destinationFilter, setDestinationFilter] = useState("");
-  const contractAddress = "0xa5AaBcFF6b8F1Ee83e4d6Bbfa3a285d04f8e2c29";
+  const contractAddress = abi.contractAddress;
   const contractABI = abi.abi;
 
   const getAllRides = async () => {
@@ -63,7 +63,9 @@ const GetRides = () => {
 
   useEffect(() => {
     const filtered = allRides.filter((ride) => {
-      const { source, destination } = extractSourceAndDestination(ride.tDetails);
+      const { source, destination } = extractSourceAndDestination(
+        ride.tDetails
+      );
       return (
         (!sourceFilter || source === sourceFilter) &&
         (!destinationFilter || destination === destinationFilter)
@@ -71,7 +73,6 @@ const GetRides = () => {
     });
     setFilteredRides(filtered);
   }, [sourceFilter, destinationFilter, allRides]);
-
 
   return (
     <div className={styles.pageContainer}>
@@ -104,7 +105,9 @@ const GetRides = () => {
           >
             <option value="">Select Destination</option>
             {allRides.map((ride) => {
-              const { destination } = extractSourceAndDestination(ride.tDetails);
+              const { destination } = extractSourceAndDestination(
+                ride.tDetails
+              );
               return (
                 <option key={destination} value={destination}>
                   {destination}

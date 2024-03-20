@@ -11,7 +11,7 @@ const MyRides = () => {
   const connectedAccount = searchParams.get("connectedAccount");
   const role = searchParams.get("role");
 
-  const contractAddress = "0xa5AaBcFF6b8F1Ee83e4d6Bbfa3a285d04f8e2c29";
+  const contractAddress = abi.contractAddress;
   const contractABI = abi.abi;
   const getMyRides = async () => {
     if (window.ethereum && connectedAccount) {
