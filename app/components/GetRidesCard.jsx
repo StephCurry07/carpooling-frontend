@@ -30,18 +30,9 @@ const GetRidesCard = ({ ride, bookRide }) => {
         <li>{distance}</li>
         <li>{gasPrice}</li>
         </ul>
-        <Link
-          href={{
-            pathname: "/ride-booked",
-            query: {
-              connectedAccount: connectedAccount,
-              balance: balance,
-              role: "passenger",
-            },
-          }}
-        >
-          <button className={styles.bookButton} onClick={BookRideHandler(ride.rideId)}>Book</button>
-        </Link>
+        
+          <button className={styles.bookButton} onClick={BookRideHandler}>Book</button>
+    
     </div>
   );
 };
