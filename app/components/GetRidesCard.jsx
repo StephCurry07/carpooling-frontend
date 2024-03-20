@@ -26,7 +26,7 @@ const GetRidesCard = ({ ride }) => {
       signer
     );
     console.log(rideId);
-    const value = parseEther("0.1");
+    const value = parseEther("0.01");
     const txn = await CarPoolingContract.bookRide(rideId, { value });
     console.log(txn.toString());
   };
