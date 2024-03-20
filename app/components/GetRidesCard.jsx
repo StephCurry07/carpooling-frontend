@@ -1,4 +1,3 @@
-
 "use client";
 import { useSearchParams } from "next/navigation";
 import styles from "../styles/get-rides.module.css";
