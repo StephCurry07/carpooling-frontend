@@ -5,7 +5,7 @@ import Link from "next/link";
 
 
 const GetRidesCard = ({ ride, bookRide }) => {
-  const [source, destination, carDetails, driverDetails, pickPoint, distance, gasPrice] = ride.tDetails.toString().split("+");
+  const [source, destination, carDetails, driverDetails, pickPoint, distance, gasPrice] = ride.tDetails.toString().split(' + ');
   const searchParams = useSearchParams();
   const connectedAccount = searchParams.get("connectedAccount");
   const balance = searchParams.get("balance");
