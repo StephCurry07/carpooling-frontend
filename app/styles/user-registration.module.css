@@ -28,6 +28,20 @@
   border-radius: 4px;
 }
 
+.carInput {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.carInput .inputField{
+  width: 250px;
+}
+
+.acNonAc{
+  margin-top: 7.5%;
+}
+
 .submitButton {
   background-color: #007bff;
   color: white;
