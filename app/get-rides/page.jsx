@@ -10,7 +10,7 @@ const GetRides = () => {
   const [allRides, setAllRides] = useState([]);
   const [filteredRides, setFilteredRides] = useState([]);
   const [sourceFilter, setSourceFilter] = useState("");
-  const [destinationFilter, setDestinationFilter] = useState(""); 
+  const [destinationFilter, setDestinationFilter] = useState("");
   const contractAddress = abi.contractAddress;
   const contractABI = abi.abi;
   const searchParams = useSearchParams();
@@ -95,7 +95,7 @@ const GetRides = () => {
 
       if (txn) {
         alert("Transaction successful");
-        window.location.href = `/my-rides?connectedAccount=${connectedAccount}&balance=${balance}&role=passenger`;;
+        window.location.href = `/ride-booked?connectedAccount=${connectedAccount}&balance=${balance}&role=passenger`;;
       }
     } catch (error) {
       console.error("Error:", error);
@@ -146,8 +146,8 @@ const GetRides = () => {
       </div>
       <div className={styles.cardContainer}>
         {filteredRides.map((ride) => (
-          <GetRidesCard 
-            key={ride.rideId} 
+          <GetRidesCard
+            key={ride.rideId}
             ride={ride}
             bookRide={bookRide}
           />
