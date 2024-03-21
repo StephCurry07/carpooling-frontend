@@ -5,6 +5,7 @@ import GetRidesCard from "@app/components/GetRidesCard";
 import abi from "../../utils/CarPooling.json";
 import styles from "../styles/get-rides.module.css";
 import { useSearchParams } from "next/navigation";
+import { ErrorDecoder } from "ethers-decode-error";
 
 const GetRides = () => {
   const [allRides, setAllRides] = useState([]);
@@ -16,6 +17,7 @@ const GetRides = () => {
   const searchParams = useSearchParams();
   const connectedAccount = searchParams.get("connectedAccount");
   const balance = searchParams.get("balance");
+  const errorDecoder = ErrorDecoder.create([contractABI]);
 
   const getAllRides = async () => {
     if (window.ethereum) {
@@ -91,14 +93,16 @@ const GetRides = () => {
       console.log(rideId);
       const value = rideFare.toString();
       const txn = await CarPoolingContract.bookRide(rideId, { value });
+      await txn.wait();
       console.log(txn.toString());
 
       if (txn) {
         alert("Transaction successful");
-        window.location.href = `/ride-booked?connectedAccount=${connectedAccount}&balance=${balance}&role=passenger`;;
+        window.location.href = `/ride-booked?connectedAccount=${connectedAccount}&balance=${balance}&role=passenger`;
       }
     } catch (error) {
-      console.error("Error:", error);
+      const decodedError = await errorDecoder.decode(error);
+      alert(decodedError.args[0]);
     }
   };
 
@@ -146,11 +150,7 @@ const GetRides = () => {
       </div>
       <div className={styles.cardContainer}>
         {filteredRides.map((ride) => (
-          <GetRidesCard
-            key={ride.rideId}
-            ride={ride}
-            bookRide={bookRide}
-          />
+          <GetRidesCard key={ride.rideId} ride={ride} bookRide={bookRide} />
         ))}
       </div>
     </div>
