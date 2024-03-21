@@ -10,7 +10,7 @@ const GetRides = () => {
   const [allRides, setAllRides] = useState([]);
   const [filteredRides, setFilteredRides] = useState([]);
   const [sourceFilter, setSourceFilter] = useState("");
-  const [destinationFilter, setDestinationFilter] = useState(""); 
+  const [destinationFilter, setDestinationFilter] = useState("");
   const contractAddress = abi.contractAddress;
   const contractABI = abi.abi;
   const searchParams = useSearchParams();
@@ -20,7 +20,7 @@ const GetRides = () => {
   const getAllRides = async () => {
     if (window.ethereum) {
       const provider = new ethers.BrowserProvider(ethereum);
-      const signer = await provider.getSigner(0);
+      const signer = await provider.getSigner();
       const CarPoolingContract = new ethers.Contract(
         contractAddress,
         contractABI,
@@ -146,8 +146,8 @@ const GetRides = () => {
       </div>
       <div className={styles.cardContainer}>
         {filteredRides.map((ride) => (
-          <GetRidesCard 
-            key={ride.rideId} 
+          <GetRidesCard
+            key={ride.rideId}
             ride={ride}
             bookRide={bookRide}
           />

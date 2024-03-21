@@ -10,7 +10,7 @@ import DateTimePicker from '@app/components/DateTimePicker'
 import { ethers } from "ethers";
 import abi from '../../utils/CarPooling.json';
 
-const contractAddress = "0xa5AaBcFF6b8F1Ee83e4d6Bbfa3a285d04f8e2c29";
+const contractAddress = abi.contractAddress;
 const contractABI = abi.abi;
 
 const createRide = () => {
@@ -48,14 +48,6 @@ const createRide = () => {
         setAcNonAc(e.target.value);
     };
 
-    const handleChangeRide = (e) => {
-        const { name, value } = e.target;
-        setRideData({
-            ...rideData,
-            [name]: value,
-        });
-    };
-
     const handleTimeChange = (e) => {
         console.log(parseInt(e.target.value));
         setSelectedTime(e.target.value);
@@ -91,12 +83,11 @@ const createRide = () => {
             await CarPoolingContract.createRide(
                 maxPassengers,
                 // formData.rideFare,
-                10,                         // to be implemented
+                1,                         // to be implemented
                 BigInt(selectedTime),
                 tripDetails,
             );
-
-            // alert('Ride created successfully!');
+            alert('Ride created successfully!');
 
         } catch (error) {
             console.log('Error creating ride:', error);
@@ -112,12 +103,10 @@ const createRide = () => {
         // console.log('Car details:', newCarDetails);
 
         // Trip details
-        const newTripDetails = `Source: ${formData.source} + Destination: ${formData.destination} + Car Details: ${newCarDetails} + Driver Details: ${formData.name} + PickupPoint: TBD + Distance: 2km + Gas Price: 100`;
+        const newTripDetails = `Source: ${formData.source} + Destination: ${formData.destination} + Car Details: ${newCarDetails} + Driver Details: ${formData.name}-${formData.age}-${formData.gender} + PickupPoint: TBD + Distance: 2km + Gas Price: 100`;
 
         setTripDetails(newTripDetails);
         console.log('Trip details:', newTripDetails);
-
-
         await createNewRide();
     };
 
@@ -216,7 +205,7 @@ const createRide = () => {
                             name="source"
                             className={styles.inputField}
                             onChange={handleChange}
-                            // required
+                            required
                         />
                     </div>
 
@@ -227,7 +216,7 @@ const createRide = () => {
                             name="destination"
                             className={styles.inputField}
                             onChange={handleChange}
-                            // required
+                            required
                         />
                     </div>
                     <div className={styles.formGroup}>
