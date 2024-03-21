@@ -20,7 +20,7 @@ const GetRides = () => {
   const getAllRides = async () => {
     if (window.ethereum) {
       const provider = new ethers.BrowserProvider(ethereum);
-      const signer = await provider.getSigner();
+      const signer = await provider.getSigner(0);
       const CarPoolingContract = new ethers.Contract(
         contractAddress,
         contractABI,
