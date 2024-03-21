@@ -3,8 +3,15 @@ import "../styles/my-rides-card.css";
 import { green } from "@mui/material/colors";
 
 const MyRidesCard = ({ ride, cancelRide, completed }) => {
-  const [source, destination, carDetails, driverDetails, pickPoint, distance, gasPrice] =
-    ride.tDetails.toString().split(' + ');
+  const [
+    source,
+    destination,
+    carDetails,
+    driverDetails,
+    pickPoint,
+    distance,
+    gasPrice,
+  ] = ride.tDetails.toString().split("+");
 
   const cancelRideHandler = async () => {
     await cancelRide(ride.rideId);

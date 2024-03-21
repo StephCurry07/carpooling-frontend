@@ -3,18 +3,25 @@ import { useSearchParams } from "next/navigation";
 import styles from "../styles/get-rides.module.css";
 import Link from "next/link";
 
-
 const GetRidesCard = ({ ride, bookRide }) => {
-  const [source, destination, carDetails, driverDetails, pickPoint, distance, gasPrice] = ride.tDetails.toString().split(' + ');
+  console.log(ride.tDetails.toString());
+  const [
+    source,
+    destination,
+    carDetails,
+    driverDetails,
+    pickPoint,
+    distance,
+    gasPrice,
+  ] = ride.tDetails.toString().split(" + ");
   const searchParams = useSearchParams();
   const connectedAccount = searchParams.get("connectedAccount");
   const balance = searchParams.get("balance");
 
   const BookRideHandler = async () => {
-    await bookRide(ride.rideId,  ride.rideFare.toString() );
+    await bookRide(ride.rideId, ride.rideFare.toString());
   };
-  
-  
+
   return (
     <div className={styles.card}>
       <p>Ride Id: {ride.rideId.toString()}</p>
@@ -29,10 +36,11 @@ const GetRidesCard = ({ ride, bookRide }) => {
         <li>{pickPoint}</li>
         <li>{distance}</li>
         <li>{gasPrice}</li>
-        </ul>
-        
-          <button className={styles.bookButton} onClick={BookRideHandler}>Book</button>
-    
+      </ul>
+
+      <button className={styles.bookButton} onClick={BookRideHandler}>
+        Book
+      </button>
     </div>
   );
 };
