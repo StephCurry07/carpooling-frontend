@@ -3,7 +3,7 @@ import "../styles/my-rides-card.css";
 
 const MyRidesCard = ({ ride, cancelRide, completed }) => {
   const [source, destination, carDetails, driverDetails, pickPoint, distance, gasPrice] =
-    ride.tDetails.toString().split("+");
+    ride.tDetails.toString().split(' + ');
 
   const cancelRideHandler = async () => {
     await cancelRide(ride.rideId);
