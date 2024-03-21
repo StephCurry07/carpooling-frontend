@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { ethers } from "ethers";
 import MyRidesCard from "@app/components/MyRidesCard";
 import abi from "../../utils/CarPooling.json";
+import { ErrorDecoder } from "ethers-decode-error"
 
 const MyRides = () => {
   const [myRides, setMyRides] = useState([]);
