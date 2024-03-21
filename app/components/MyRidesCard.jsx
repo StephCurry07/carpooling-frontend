@@ -1,9 +1,17 @@
 import React from "react";
 import "../styles/my-rides-card.css";
+import { green } from "@mui/material/colors";
 
 const MyRidesCard = ({ ride, cancelRide, completed }) => {
-  const [source, destination, carDetails, driverDetails, pickPoint, distance, gasPrice] =
-    ride.tDetails.toString().split("+");
+  const [
+    source,
+    destination,
+    carDetails,
+    driverDetails,
+    pickPoint,
+    distance,
+    gasPrice,
+  ] = ride.tDetails.toString().split("+");
 
   const cancelRideHandler = async () => {
     await cancelRide(ride.rideId);
@@ -38,8 +46,28 @@ const MyRidesCard = ({ ride, cancelRide, completed }) => {
       <div className="card-item">
         <p>{pickPoint}</p>
       </div>
-      <button onClick={cancelRideHandler}>Cancel Ride</button>
-      <button onClick={completedHandler}>Completed</button>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "row-reverse",
+        }}
+      >
+        <button
+          className="btn"
+          style={{ backgroundColor: "red" }}
+          onClick={cancelRideHandler}
+        >
+          Cancel Ride
+        </button>
+        <button
+          className="btn"
+          style={{ backgroundColor: "green" }}
+          onClick={completedHandler}
+        >
+          Completed
+        </button>
+      </div>
     </div>
   );
 };

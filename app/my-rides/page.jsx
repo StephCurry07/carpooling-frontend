@@ -99,7 +99,13 @@ const MyRides = () => {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
       {role === "not chosen" ? (
         <h1>Please either register as a driver or a passenger first</h1>
       ) : (
