@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { ethers } from "ethers";
 import MyRidesCard from "@app/components/MyRidesCard";
 import abi from "../../utils/CarPooling.json";
-import { ErrorDecoder } from "ethers-decode-error"
+import { ErrorDecoder } from "ethers-decode-error";
 
 const MyRides = () => {
   const [myRides, setMyRides] = useState([]);
@@ -14,6 +14,7 @@ const MyRides = () => {
 
   const contractAddress = abi.contractAddress;
   const contractABI = abi.abi;
+  const errorDecoder = ErrorDecoder.create([contractABI]);
   const getMyRides = async () => {
     if (window.ethereum && connectedAccount) {
       const provider = new ethers.BrowserProvider(window.ethereum);
@@ -83,8 +84,14 @@ const MyRides = () => {
     console.log(rideId);
 
     if (role === "driver") {
-      const txn = await CarPoolingContract.rideCompleted(rideId);
-      console.log(txn);
+      try {
+        const txn = await CarPoolingContract.rideCompleted(rideId);
+        await txn.wait();
+        console.log(txn);
+      } catch (err) {
+        const decodedError = await errorDecoder.decode(err);
+        alert(decodedError.args[0]);
+      }
     } else {
       const txn = await CarPoolingContract.updateStatus(rideId);
       console.log(txn);
