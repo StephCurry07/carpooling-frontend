@@ -2,6 +2,7 @@
   "_format": "hh-sol-artifact-1",
   "contractName": "CarPooling",
   "sourceName": "contracts/CarPooling.sol",
+  "contractAddress": "0xa5AaBcFF6b8F1Ee83e4d6Bbfa3a285d04f8e2c29",
   "abi": [
     {
       "inputs": [

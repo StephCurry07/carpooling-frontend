@@ -1,33 +1,19 @@
-
 "use client";
-import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { ethers } from "ethers";
 import styles from "../styles/get-rides.module.css";
 import Link from "next/link";
-import abi from "../../utils/CarPooling.json";
 
 
-const GetRidesCard = ({ ride }) => {
-  const [locations, carDetails, driverDetails, pickPoint, distance, gasPrice] = ride.tDetails.toString().split("+");
+const GetRidesCard = ({ ride, bookRide }) => {
+  const [source, destination, carDetails, driverDetails, pickPoint, distance, gasPrice] = ride.tDetails.toString().split("+");
   const searchParams = useSearchParams();
   const connectedAccount = searchParams.get("connectedAccount");
   const balance = searchParams.get("balance");
-  const contractAddress = "0x561002b9991332045E465440b981a32914F935c9";
-  const contractABI = abi.abi;
-  
-  const BookRide = async(rideId) => {
-    const provider = new ethers.BrowserProvider(ethereum);
-    const signer = await provider.getSigner();
-    const CarPoolingContract = new ethers.Contract(
-      contractAddress,
-      contractABI,
-      signer
-    );
-    console.log(rideId);
-    const txn = await CarPoolingContract.bookRide(rideId);
-    console.log(txn.toString());
+
+  const BookRideHandler = async () => {
+    await bookRide(ride.rideId,  ride.rideFare.toString() );
   };
+  
   
   return (
     <div className={styles.card}>
@@ -36,25 +22,17 @@ const GetRidesCard = ({ ride }) => {
         <li>Ride Fare: {ride.rideFare.toString()}</li>
         <li>Max Passengers: {ride.mPassengers.toString()}</li>
         <li>Current Passengers: {ride.passengers.toString()}</li>
-        <li>Locations: {locations}</li>
+        <li>{source}</li>
+        <li>{destination}</li>
         <li>{carDetails}</li>
         <li>{driverDetails}</li>
         <li>{pickPoint}</li>
         <li>{distance}</li>
         <li>{gasPrice}</li>
         </ul>
-        <Link
-          href={{
-            pathname: "/ride-booked",
-            query: {
-              connectedAccount: connectedAccount,
-              balance: balance,
-              role: "passenger",
-            },
-          }}
-        >
-          <button className={styles.bookButton} onClick={BookRide(ride.rideId)}>Book</button>
-        </Link>
+        
+          <button className={styles.bookButton} onClick={BookRideHandler}>Book</button>
+    
     </div>
   );
 };

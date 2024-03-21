@@ -11,7 +11,7 @@ const MyRides = () => {
   const connectedAccount = searchParams.get("connectedAccount");
   const role = searchParams.get("role");
 
-  const contractAddress = "0xa5AaBcFF6b8F1Ee83e4d6Bbfa3a285d04f8e2c29";
+  const contractAddress = abi.contractAddress;
   const contractABI = abi.abi;
   const getMyRides = async () => {
     if (window.ethereum && connectedAccount) {
@@ -38,21 +38,19 @@ const MyRides = () => {
         rideConverted.push(ride);
       }
 
-      // let rideFiltered = [];
+      let rideFiltered = [];
 
-      // if (role === "driver") {
-      //   rideFiltered = rideConverted.filter(
-      //     (ride) => ride.driver === connectedAccount
-      //   );
-      // } else {
-      //   rideFiltered = rideConverted.filter((ride) =>
-      //     connectedAccount.match(ride.driver)
-      //   );
-      // }
+      if (role === "driver") {
+        rideFiltered = rideConverted.filter(
+          (ride) => connectedAccount === ride.driver.toLowerCase()
+        );
+      } else {
+        rideFiltered = rideConverted.filter(
+          (ride) => connectedAccount !== ride.driver.toLowerCase()
+        );
+      }
 
-      // console.log(rideFiltered);
-
-      setMyRides(rideConverted);
+      setMyRides(rideFiltered);
     }
   };
 
@@ -88,12 +86,12 @@ const MyRides = () => {
       console.log(txn);
     } else {
       const txn = await CarPoolingContract.updateStatus(rideId);
+      console.log(txn);
     }
   };
 
   return (
     <div>
-      <h1>My rides:</h1> <br />
       {role === "not chosen" ? (
         <h1>Please either register as a driver or a passenger first</h1>
       ) : (
