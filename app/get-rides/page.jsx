@@ -95,7 +95,7 @@ const GetRides = () => {
 
       if (txn) {
         alert("Transaction successful");
-        window.location.href = `/my-rides?connectedAccount=${connectedAccount}&balance=${balance}&role=passenger`;;
+        window.location.href = `/ride-booked?connectedAccount=${connectedAccount}&balance=${balance}&role=passenger`;;
       }
     } catch (error) {
       console.error("Error:", error);
