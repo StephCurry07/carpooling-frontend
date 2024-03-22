@@ -1,8 +1,7 @@
 import React from "react";
 import "../styles/my-rides-card.css";
-import { green } from "@mui/material/colors";
 
-const MyRidesCard = ({ ride, cancelRide, completed }) => {
+const MyRidesCard = ({ ride, cancelRide, completed, role, exchangeRate }) => {
   const [
     source,
     destination,
@@ -12,6 +11,13 @@ const MyRidesCard = ({ ride, cancelRide, completed }) => {
     distance,
     gasPrice,
   ] = ride.tDetails.toString().split("+");
+
+  const fareInUSD = Math.ceil(
+    (parseFloat(ride.rideFare) / 1e18) * exchangeRate.USD
+  );
+  console.log(ride.rideId, fareInUSD);
+  const totalFare =
+    role === "driver" ? fareInUSD * parseInt(ride.passengers) : fareInUSD;
 
   const cancelRideHandler = async () => {
     await cancelRide(ride.rideId);
@@ -23,13 +29,14 @@ const MyRidesCard = ({ ride, cancelRide, completed }) => {
 
   return (
     <div className="card">
+      <h3>RIDE ID : {ride.rideId.toString()}</h3>
       <div className="card-item">
         <p>Current Passengers : {ride.passengers.toString()}</p>
         <p>Max Passengers : {ride.mPassengers.toString()}</p>
       </div>
       <div className="card-item">
-        <p>Ride Id : {ride.rideId.toString()}</p>
-        <p>Ride Fare : {ride.rideFare.toString()}</p>
+        <p>Ride Fare : {fareInUSD}$</p>
+        <p>{pickPoint}</p>
       </div>
       <div className="card-item">
         <p>{distance}</p>
@@ -43,26 +50,31 @@ const MyRidesCard = ({ ride, cancelRide, completed }) => {
         <p>{driverDetails}</p>
         <p>{carDetails}</p>
       </div>
-      <div className="card-item">
-        <p>{pickPoint}</p>
-      </div>
+
       <div
         style={{
           width: "100%",
           display: "flex",
-          flexDirection: "row-reverse",
+          flexDirection: "row",
+          borderTop: "2px dotted #000",
         }}
       >
+        <div
+          className="card-item"
+          style={{ marginLeft: "50px", marginTop: "10px" }}
+        >
+          <p>Total Fare : {totalFare}$</p>
+        </div>
         <button
           className="btn"
-          style={{ backgroundColor: "red" }}
+          style={{ color: "red" }}
           onClick={cancelRideHandler}
         >
           Cancel Ride
         </button>
         <button
           className="btn"
-          style={{ backgroundColor: "green" }}
+          style={{ color: "green" }}
           onClick={completedHandler}
         >
           Completed

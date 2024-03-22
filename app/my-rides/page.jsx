@@ -8,6 +8,7 @@ import { ErrorDecoder } from "ethers-decode-error";
 
 const MyRides = () => {
   const [myRides, setMyRides] = useState([]);
+  const [exchangeRate, setExchangeRate] = useState({});
   const searchParams = useSearchParams();
   const connectedAccount = searchParams.get("connectedAccount");
   const role = searchParams.get("role");
@@ -53,6 +54,14 @@ const MyRides = () => {
       }
 
       setMyRides(rideFiltered);
+
+      const response = await fetch(
+        "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD&api_key=4baa560324eaf1de14b1960925c15ee24180733839c0772f85a0f939d293c5f1"
+      );
+
+      const jsonData = await response.json();
+      console.log(jsonData.USD);
+      setExchangeRate(jsonData);
     }
   };
 
@@ -115,6 +124,8 @@ const MyRides = () => {
             ride={ride}
             cancelRide={cancelRide}
             completed={completed}
+            role={role}
+            exchangeRate={exchangeRate}
           />
         ))
       )}
