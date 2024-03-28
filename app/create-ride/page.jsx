@@ -5,19 +5,17 @@ import { useState, useEffect } from "react";
 import styles from "../styles/user-registration.module.css";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import DateTimePicker from "@app/components/DateTimePicker";
+import { DateTimePicker } from "@mui/x-date-pickers";
 
 import { ethers } from "ethers";
 import abi from "../../utils/CarPooling.json";
-import { waitUntilSymbol } from "next/dist/server/web/spec-extension/fetch-event";
-import SelectInput from "@mui/material/Select/SelectInput";
-import { CLIENT_STATIC_FILES_RUNTIME_MAIN_APP } from "next/dist/shared/lib/constants";
 
 const contractAddress = abi.contractAddress;
 const contractABI = abi.abi;
 
 const createRide = () => {
-  const [selectedTime, setSelectedTime] = useState("");
+  const [selectedTime, setSelectedTime] = useState(new Date());
+  const [secondsSinceEpoch, setSecondsSinceEpoch] = useState(null);
   const [tripDetails, setTripDetails] = useState("");
   const [acNonAc, setAcNonAc] = useState("AC");
   const [maxPassengers, setMaxPassengers] = useState(0);
@@ -25,6 +23,8 @@ const createRide = () => {
   const [value, setValue] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const [flag, setFlag] = useState(0);
+  const [Pup, setPup] = useState("");
+  const [selectedDateTime, setselectedDateTime] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,10 +53,15 @@ const createRide = () => {
     setAcNonAc(e.target.value);
   };
 
-  const handleTimeChange = (e) => {
-    console.log(parseInt(e.target.value));
-    setSelectedTime(e.target.value);
-  };
+
+ 
+  
+  useEffect(() => {
+    const savedFormData = localStorage.getItem('formData');
+    if (savedFormData) {
+      setFormData(JSON.parse(savedFormData));
+    }
+  }, []);
 
   useEffect(() => {
     if (!formData) {
@@ -75,16 +80,29 @@ const createRide = () => {
   }, [formData, tripDetails]);
 
   useEffect(() => {
-    // This effect will run whenever myVariable changes
-    if (tripDetails != "") {
-      // Perform actions here once myVariable changes to true
+    console.log('effect' + selectedTime);
+    if (tripDetails !== "") {
       createNewRide();
     }
   }, [tripDetails]);
 
+  const handleTimeChange = (e) => {
+    const selectedDateTime = e instanceof Date ? e : new Date(e);
+    const selectedDateTimeUTC = new Date(selectedDateTime.getTime() + selectedDateTime.getTimezoneOffset() * 60000);
+    console.log('Selected time:', selectedDateTime);
+  
+    const secondsSinceEpoch = Math.floor(selectedDateTimeUTC.getTime() / 1000);
+    setselectedDateTime(selectedDateTime);
+    setSecondsSinceEpoch(secondsSinceEpoch);
+  };
+
   const createNewRide = async () => {
+    if (secondsSinceEpoch === null) {
+      console.error("Selected time is null. Please select a valid time.");
+      return;
+    }
+
     try {
-      // const provider = new ethers.JsonRpcProvider('http://localhost:8545')
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const CarPoolingContract = new ethers.Contract(
@@ -92,13 +110,13 @@ const createRide = () => {
         contractABI,
         signer
       );
-      //console.log(selectedTime);
+  
       console.log(tripDetails);
       await CarPoolingContract.createRide(
         maxPassengers,
         // formData.rideFare,
         1, // to be implemented
-        BigInt(selectedTime),
+        BigInt(secondsSinceEpoch),
         tripDetails
       );
       alert("Ride created successfully!");
@@ -107,21 +125,19 @@ const createRide = () => {
     }
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Car details
-    const newCarDetails = `${formData.carName} ${
-      formData.maxPassengers || maxPassengers
-    } Seater ${acNonAc}`;
-    // setCarDetails(newCarDetails);
+    const newCarDetails = `${formData.carName} ${formData.maxPassengers || maxPassengers
+      } Seater ${acNonAc}`;
     // console.log('Car details:', newCarDetails);
 
     // Trip details
-    const newTripDetails = `Source: ${formData.source} + Destination: ${formData.destination} + Car Details: ${newCarDetails} + Driver Details: ${formData.name}-${formData.age}-${formData.gender} + PickupPoint: TBD + Distance: 2km + Gas Price: 100`;
+    const newTripDetails=`Source: ${formData.source} + Destination: ${formData.destination} + Car Details: ${newCarDetails} + Driver Details: ${formData.name}-${formData.age}-${formData.gender} + Pick up point: ${formData.pup} + Distance: 2km + Gas Price: 100 + time: ${selectedDateTime}`;
 
     setTripDetails(newTripDetails);
-    //console.log('Trip details:', newTripDetails);
   };
 
   return (
@@ -237,7 +253,19 @@ const createRide = () => {
               required
             />
           </div>
+
           <div className={styles.formGroup}>
+            <label className={styles.label}>Pickup Point:</label>
+            <input
+              type="text"
+              name="pup"
+              className={styles.inputField}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Choose date and time for ride:</label>
             <DateTimePicker value={selectedTime} onChange={handleTimeChange} />
           </div>
           <br />

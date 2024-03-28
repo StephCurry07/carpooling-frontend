@@ -13,6 +13,7 @@ const GetRidesCard = ({ ride, bookRide, exchangeRate }) => {
     pickPoint,
     distance,
     gasPrice,
+    time,
   ] = ride.tDetails.toString().split(" + ");
   const searchParams = useSearchParams();
   const connectedAccount = searchParams.get("connectedAccount");
@@ -25,7 +26,7 @@ const GetRidesCard = ({ ride, bookRide, exchangeRate }) => {
   const fareInUSD = Math.ceil(
     (parseFloat(ride.rideFare) / 1e18) * exchangeRate.USD
   );
-  const dateTime = new Date(Number(ride.time));
+  const dateTime = new Date(time);
   const formattedDate = dateTime.toLocaleDateString();
   const formattedTime = dateTime.toLocaleTimeString();
 
