@@ -10,7 +10,12 @@ const MyRidesCard = ({ ride, cancelRide, completed, role, exchangeRate }) => {
     pickPoint,
     distance,
     gasPrice,
-  ] = ride.tDetails.toString().split("+");
+    time,
+  ] = ride.tDetails.toString().split(" + ");
+
+  const dateTime = new Date(time);
+  const formattedDate = dateTime.toLocaleDateString();
+  const formattedTime = dateTime.toLocaleTimeString();
 
   const fareInUSD = Math.ceil(
     (parseFloat(ride.rideFare) / 1e18) * exchangeRate.USD
@@ -31,16 +36,20 @@ const MyRidesCard = ({ ride, cancelRide, completed, role, exchangeRate }) => {
     <div className="card">
       <h3>RIDE ID : {ride.rideId.toString()}</h3>
       <div className="card-item">
+        <p>Date : {formattedDate}</p>
+        <p>Time : {formattedTime}</p>
+      </div>
+      <div className="card-item">
         <p>Current Passengers : {ride.passengers.toString()}</p>
         <p>Max Passengers : {ride.mPassengers.toString()}</p>
       </div>
       <div className="card-item">
-        <p>Ride Fare : {fareInUSD}$</p>
-        <p>{pickPoint}</p>
-      </div>
-      <div className="card-item">
         <p>{distance}</p>
         <p>{gasPrice}</p>
+      </div>
+      <div className="card-item">
+        <p>Ride Fare : {fareInUSD}$</p>
+        <p>{pickPoint}</p>
       </div>
       <div className="card-item">
         <p>{source}</p>
