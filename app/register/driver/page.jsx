@@ -34,7 +34,6 @@ const DriverRegistration = () => {
     localStorage.setItem('formData', JSON.stringify(formData));
     router.push({
       pathname: '/create-ride',
-      
     });
   };
 
