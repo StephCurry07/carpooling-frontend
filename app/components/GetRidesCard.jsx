@@ -3,7 +3,7 @@ import { useSearchParams } from "next/navigation";
 import styles from "../styles/get-rides.module.css";
 import Link from "next/link";
 
-const GetRidesCard = ({ ride, bookRide }) => {
+const GetRidesCard = ({ ride, bookRide, exchangeRate }) => {
   console.log(ride.tDetails.toString());
   const [
     source,
@@ -22,27 +22,47 @@ const GetRidesCard = ({ ride, bookRide }) => {
     await bookRide(ride.rideId, ride.rideFare.toString());
   };
 
+  const fareInUSD = Math.ceil(
+    (parseFloat(ride.rideFare) / 1e18) * exchangeRate.USD
+  );
+  const dateTime = new Date(Number(ride.time));
+  const formattedDate = dateTime.toLocaleDateString();
+  const formattedTime = dateTime.toLocaleTimeString();
+
   return (
     <div className={styles.card}>
-      <p>Ride Id: {ride.rideId.toString()}</p>
-      <ul className={styles.details}>
-        <li>Ride Fare: {ride.rideFare.toString()}</li>
-        <li>Max Passengers: {ride.mPassengers.toString()}</li>
-        <li>Current Passengers: {ride.passengers.toString()}</li>
-        <li>{source}</li>
-        <li>{destination}</li>
-        <li>{carDetails}</li>
-        <li>{driverDetails}</li>
-        <li>{pickPoint}</li>
-        <li>{distance}</li>
-        <li>{gasPrice}</li>
-      </ul>
-
+      <div className={styles.imageContainer}>
+        <img src="/images/car.png" alt="Placeholder" className={styles.image} />
+      </div>
+      <div className={styles.details}>
+      
+        <p><strong>Ride Details</strong></p>
+        <ul>
+          <li>Ride Fare: {fareInUSD}$</li>
+          <li>{source}</li>
+          <li>{destination}</li>
+          <li>{distance}</li>
+          <li>{gasPrice}</li>
+          <li>Date: {formattedDate}</li>
+          <li>Time: {formattedTime}</li>
+        </ul>
+      </div>
+      <div className={styles.details}>
+        <p><strong>Car Details</strong></p>
+        <ul>
+          <li>Max Passengers: {ride.mPassengers.toString()}</li>
+          <li>Current Passengers: {ride.passengers.toString()}</li>
+          <li>{carDetails}</li>
+          <li>{driverDetails}</li>
+          <li>{pickPoint}</li>
+        </ul>
+      </div>
       <button className={styles.bookButton} onClick={BookRideHandler}>
-        Book
+        BOOK
       </button>
     </div>
   );
 };
 
 export default GetRidesCard;
+

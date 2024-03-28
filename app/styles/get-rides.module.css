@@ -1,6 +1,7 @@
 /* get-rides.module.css */
 
 .pageContainer {
+  background-color: #D2DDDB;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,40 +19,71 @@
   flex-direction: row;
 }
 
-.cardContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 20px;
+.card:hover {
+  transform: scale(1.08); /* Scale the container by 5% when hovered */
 }
 
-.details {
-  list-style: none; 
-  padding: 0; 
+
+.cardContainer {
+  display: flex;
+  flex-wrap: wrap; /* Allow multiple rows */
+  justify-content: center;
+  margin-top: 20px;
+  font-size: 14px;
 }
 
 .card {
   background-color: #ffffff;
-  border: 2px solid #000000;
-  border-radius: 8px;
-  padding: 10px;
-  margin: 5px;
-  width: 350px;
-  height: 370px;
-  max-width: 400px;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 15px;
+  width: 800px; /* Adjust width as needed */
+  height: 250px;
+  max-width: 100%;
   box-sizing: border-box;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-start; /* Align items to the top */
+  position: relative;
 }
+
+.details {
+  width: 45%;
+}
+
+.details p {
+  font-weight: bold;
+}
+
+.details ul {
+  list-style: none;
+  padding: 0;
+}
+
 
 .bookButton {
   padding: 10px 20px;
-  background-color: #fbff00;
-  color: rgb(0, 0, 0);
-  border: 1px solid #000000;
+  background-color: #383838;
+  color: yellow;
+  border: 2px solid #000000;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 10px;
+  margin-top: auto;
+  position: absolute; /* Position relative to the card */
+  bottom: 20px; /* Adjust distance from bottom as needed */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%);
 }
+
+.imageContainer {
+  width: 30%;
+  
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+

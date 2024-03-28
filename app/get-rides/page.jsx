@@ -9,6 +9,7 @@ import { ErrorDecoder } from "ethers-decode-error";
 
 const GetRides = () => {
   const [allRides, setAllRides] = useState([]);
+  const [exchangeRate, setExchangeRate] = useState({});
   const [filteredRides, setFilteredRides] = useState([]);
   const [sourceFilter, setSourceFilter] = useState("");
   const [destinationFilter, setDestinationFilter] = useState("");
@@ -46,7 +47,16 @@ const GetRides = () => {
 
       setAllRides(rideConverted);
       setFilteredRides(rideConverted);
+
+      const response = await fetch(
+        "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD&api_key=4baa560324eaf1de14b1960925c15ee24180733839c0772f85a0f939d293c5f1"
+      );
+
+      const jsonData = await response.json();
+      console.log(jsonData.USD);
+      setExchangeRate(jsonData);
     }
+      
   };
 
   useEffect(() => {
@@ -110,7 +120,7 @@ const GetRides = () => {
     <div className={styles.pageContainer}>
       <div className={styles.filterContainer}>
         <div>
-          <label htmlFor="sourceFilter">Source:</label>
+          <label htmlFor="sourceFilter"><strong>Source:</strong></label>
           <select
             id="sourceFilter"
             value={sourceFilter}
@@ -128,7 +138,7 @@ const GetRides = () => {
           </select>
         </div>
         <div>
-          <label htmlFor="destinationFilter">Destination:</label>
+          <label htmlFor="destinationFilter"><strong>Destination</strong></label>
           <select
             id="destinationFilter"
             value={destinationFilter}
@@ -150,7 +160,7 @@ const GetRides = () => {
       </div>
       <div className={styles.cardContainer}>
         {filteredRides.map((ride) => (
-          <GetRidesCard key={ride.rideId} ride={ride} bookRide={bookRide} />
+          <GetRidesCard key={ride.rideId} ride={ride} bookRide={bookRide} exchangeRate={exchangeRate}/>
         ))}
       </div>
     </div>
