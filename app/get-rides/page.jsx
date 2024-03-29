@@ -79,7 +79,10 @@ const GetRides = () => {
   };
 
   useEffect(() => {
-    const currentTimePlusfive = new Date(Date.now() + 5 * 60000);
+    const currentDateTime = new Date(Date.now());
+    const currentTimePlusfive = new Date(
+      currentDateTime.getTime() + currentDateTime.getTimezoneOffset() * 60000 + 5*60000
+    );
   
     const filtered = allRides.filter((ride) => {
       const { source, destination } = extractSourceAndDestination(
