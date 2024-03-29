@@ -13,6 +13,7 @@ const GetRides = () => {
   const [filteredRides, setFilteredRides] = useState([]);
   const [sourceFilter, setSourceFilter] = useState("");
   const [destinationFilter, setDestinationFilter] = useState("");
+  const [timeFilter, setTimeFilter] = useState("");
   const contractAddress = abi.contractAddress;
   const contractABI = abi.abi;
   const searchParams = useSearchParams();
@@ -56,7 +57,6 @@ const GetRides = () => {
       console.log(jsonData.USD);
       setExchangeRate(jsonData);
     }
-      
   };
 
   useEffect(() => {
@@ -79,17 +79,25 @@ const GetRides = () => {
   };
 
   useEffect(() => {
+    const currentTimePlusfive = new Date(Date.now() + 5 * 60000);
+  
     const filtered = allRides.filter((ride) => {
       const { source, destination } = extractSourceAndDestination(
         ride.tDetails
       );
+  
+      const rideTime = new Date(Number(ride.time) * 1000);
+  
       return (
         (!sourceFilter || source === sourceFilter) &&
-        (!destinationFilter || destination === destinationFilter)
+        (!destinationFilter || destination === destinationFilter) &&
+        (!timeFilter || rideTime >= new Date(timeFilter)) &&
+        rideTime >= currentTimePlusfive
       );
     });
     setFilteredRides(filtered);
-  }, [sourceFilter, destinationFilter, allRides]);
+  }, [sourceFilter, destinationFilter, timeFilter, allRides]);
+  
 
   const bookRide = async (rideId, rideFare) => {
     try {
@@ -156,6 +164,16 @@ const GetRides = () => {
               );
             })}
           </select>
+        </div>
+        <div>
+          <label htmlFor="timeFilter"><strong>Time:</strong></label>
+          <input
+            id="timeFilter"
+            type="datetime-local"
+            value={timeFilter}
+            min={new Date().toISOString().split("T")[0] + "T00:00"}
+            onChange={(e) => setTimeFilter(e.target.value)}
+          />
         </div>
       </div>
       <div className={styles.cardContainer}>
