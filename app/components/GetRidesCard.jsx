@@ -33,27 +33,30 @@ const GetRidesCard = ({ ride, bookRide, exchangeRate }) => {
   return (
     <div className={styles.card}>
       <div className={styles.imageContainer}>
-        <img src="/images/car.png" alt="Placeholder" className={styles.image} />
+      {ride.mPassengers.toString() <= 4 ? (
+          <img src="/images/car.png" alt="Small Car" className={styles.image} />
+        ) : (
+          <img src="/images/car2.png" alt="Big Car" className={styles.image} />
+        )}
       </div>
-      <div className={styles.details}>
-      
-        <p><strong>Ride Details</strong></p>
+      <div className={styles.ridedetails}>
+        <p>Ride Details</p>
         <ul>
           <li>Ride Fare: {fareInUSD}$</li>
           <li>{source}</li>
           <li>{destination}</li>
           <li>{distance}</li>
-          <li>{gasPrice}</li>
           <li>Date: {formattedDate}</li>
           <li>Time: {formattedTime}</li>
         </ul>
       </div>
-      <div className={styles.details}>
+      <div className={styles.cardetails}>
         <p><strong>Car Details</strong></p>
         <ul>
           <li>Max Passengers: {ride.mPassengers.toString()}</li>
           <li>Current Passengers: {ride.passengers.toString()}</li>
           <li>{carDetails}</li>
+          <li>{gasPrice}</li>
           <li>{driverDetails}</li>
           <li>{pickPoint}</li>
         </ul>

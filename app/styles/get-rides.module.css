@@ -29,7 +29,7 @@
   flex-wrap: wrap; /* Allow multiple rows */
   justify-content: center;
   margin-top: 20px;
-  font-size: 14px;
+  font-size: medium;
 }
 
 .card {
@@ -38,7 +38,7 @@
   padding: 20px;
   margin: 15px;
   width: 800px; /* Adjust width as needed */
-  height: 250px;
+  height: 270px;
   max-width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -47,17 +47,28 @@
   position: relative;
 }
 
-.details {
+.cardetails {
   width: 45%;
 }
 
-.details p {
+.ridedetails p {
   font-weight: bold;
+  margin-left: 40px; 
 }
 
-.details ul {
+.cardetails ul {
   list-style: none;
   padding: 0;
+}
+
+.ridedetails {
+  width: 45%;
+}
+
+
+.ridedetails ul {
+  list-style: none;
+  padding:10;
 }
 
 

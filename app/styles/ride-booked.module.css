@@ -3,6 +3,7 @@
 .container {
     background-size: cover;
     background-position: center;
+    background-color: #D2DDDB;
     height: 100vh;
     display: flex;
     flex-direction: column;
