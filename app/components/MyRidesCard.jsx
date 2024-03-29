@@ -29,7 +29,7 @@ const MyRidesCard = ({ ride, cancelRide, completed, role, exchangeRate }) => {
   };
 
   const completedHandler = async () => {
-    await completed(ride.rideId);
+    await completed(ride.rideId, ride.time);
   };
 
   return (

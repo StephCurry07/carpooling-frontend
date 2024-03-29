@@ -78,11 +78,7 @@ const MyRides = () => {
     console.log(txn.toString());
   };
 
-  useEffect(() => {
-    getMyRides();
-  }, [connectedAccount]);
-
-  const completed = async (rideId) => {
+  const completed = async (rideId, startTime) => {
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
     const CarPoolingContract = new ethers.Contract(
@@ -90,7 +86,18 @@ const MyRides = () => {
       contractABI,
       signer
     );
-    console.log(rideId);
+    console.log(rideId, startTime);
+
+    const currentDateTime = new Date(Date.now());
+    const currentDateTimeUTC = new Date(
+      currentDateTime.getTime() + currentDateTime.getTimezoneOffset() * 60000
+    );
+
+    const currentTimeSeconds = Math.floor(currentDateTimeUTC.getTime() / 1000);
+    if (currentTimeSeconds - Number(startTime) < 0) {
+      alert("You can only perform this action after the ride is started");
+      return;
+    }
 
     if (role === "driver") {
       try {
@@ -106,6 +113,10 @@ const MyRides = () => {
       console.log(txn);
     }
   };
+
+  useEffect(() => {
+    getMyRides();
+  }, [connectedAccount]);
 
   return (
     <div
