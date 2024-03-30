@@ -41,11 +41,22 @@ const MyRides = () => {
         rideConverted.push(ride);
       }
 
+      const currentDateTime = new Date(Date.now());
+      const currentDateTimeUTC = new Date(
+        currentDateTime.getTime() + currentDateTime.getTimezoneOffset() * 60000
+      );
+
+      const currentTimeSeconds = Math.floor(
+        currentDateTimeUTC.getTime() / 1000
+      );
+
       let rideFiltered = [];
 
       if (role === "driver") {
         rideFiltered = rideConverted.filter(
-          (ride) => connectedAccount === ride.driver.toLowerCase()
+          (ride) =>
+            connectedAccount === ride.driver.toLowerCase() &&
+            (Number(ride.time) - currentTimeSeconds > 0 || ride.passengers > 0)
         );
       } else {
         rideFiltered = rideConverted.filter(
@@ -126,8 +137,21 @@ const MyRides = () => {
         alignItems: "center",
       }}
     >
-      {role === "not chosen" ? (
-        <h1>Please either register as a driver or a passenger first</h1>
+      {role === "not chosen" || myRides.length == 0 ? (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <h1>No rides to show.</h1>
+          <h3>
+            If you have not chosen a role till now kindly please choose a role
+            first.
+          </h3>
+        </div>
       ) : (
         myRides.map((ride) => (
           <MyRidesCard
