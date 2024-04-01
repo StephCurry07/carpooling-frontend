@@ -38,7 +38,7 @@
   padding: 20px;
   margin: 15px;
   width: 800px; /* Adjust width as needed */
-  height: 270px;
+  height: 280px;
   max-width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -49,11 +49,6 @@
 
 .cardetails {
   width: 45%;
-}
-
-.ridedetails p {
-  font-weight: bold;
-  margin-left: 40px; 
 }
 
 .cardetails ul {
@@ -97,4 +92,12 @@
   height: auto;
   border-radius: 5px;
 }
+.hide {
+  display: none;
+}
+
+.show {
+  display: block; /* or any appropriate display property */
+}
+
 

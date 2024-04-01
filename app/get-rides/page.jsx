@@ -180,9 +180,13 @@ const GetRides = () => {
         </div>
       </div>
       <div className={styles.cardContainer}>
-        {filteredRides.map((ride) => (
+      {filteredRides.length > 0 ? (
+        filteredRides.map((ride) => (
           <GetRidesCard key={ride.rideId} ride={ride} bookRide={bookRide} exchangeRate={exchangeRate}/>
-        ))}
+        ))
+      ) : (
+        <p>No Rides Available</p>
+      )}
       </div>
     </div>
   );

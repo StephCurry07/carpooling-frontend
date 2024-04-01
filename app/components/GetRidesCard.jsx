@@ -1,7 +1,22 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import styles from "../styles/get-rides.module.css";
-import Link from "next/link";
+import PlaceIcon from '@mui/icons-material/Place';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
+import PersonIcon from '@mui/icons-material/Person';
+import GroupIcon from '@mui/icons-material/Group';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+import HailIcon from '@mui/icons-material/Hail';
+import PaymentsIcon from '@mui/icons-material/Payments';
+import LocaltaxiIcon from '@mui/icons-material/LocalTaxi';
+import HomeIcon from '@mui/icons-material/Home';
+import StraightIcon from '@mui/icons-material/Straight';
+
+
+
 
 const GetRidesCard = ({ ride, bookRide, exchangeRate }) => {
   console.log(ride.tDetails.toString());
@@ -40,25 +55,23 @@ const GetRidesCard = ({ ride, bookRide, exchangeRate }) => {
         )}
       </div>
       <div className={styles.ridedetails}>
-        <p>Ride Details</p>
         <ul>
-          <li>Ride Fare: {fareInUSD}$</li>
-          <li>{source}</li>
-          <li>{destination}</li>
-          <li>{distance}</li>
-          <li>Date: {formattedDate}</li>
-          <li>Time: {formattedTime}</li>
+          <li><PaymentsIcon /> Cost: {fareInUSD}$</li>
+          <li><PlaceIcon /> {source}</li>
+          <li><HomeIcon /> {destination}</li>
+          <li><StraightIcon /> {distance}</li>
+          <li><CalendarTodayIcon /> {formattedDate}</li>
+          <li><AccessTimeIcon /> {formattedTime}</li>
         </ul>
       </div>
       <div className={styles.cardetails}>
-        <p><strong>Car Details</strong></p>
         <ul>
-          <li>Max Passengers: {ride.mPassengers.toString()}</li>
-          <li>Current Passengers: {ride.passengers.toString()}</li>
-          <li>{carDetails}</li>
-          <li>{gasPrice}</li>
-          <li>{driverDetails}</li>
-          <li>{pickPoint}</li>
+          <li><GroupIcon /> Max Passengers: {ride.mPassengers.toString()}</li>
+          <li><PersonIcon /> Current Passengers: {ride.passengers.toString()}</li>
+          <li><LocaltaxiIcon /> {carDetails}</li>
+          <li><LocalGasStationIcon /> {gasPrice}</li>
+          <li><CreditCardIcon /> {driverDetails}</li>
+          <li><HailIcon /> {pickPoint}</li>
         </ul>
       </div>
       <button className={styles.bookButton} onClick={BookRideHandler}>
