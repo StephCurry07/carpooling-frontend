@@ -131,7 +131,7 @@ const GetRides = () => {
     <div className={styles.pageContainer}>
       <div className={styles.filterContainer}>
         <div>
-          <label htmlFor="sourceFilter"><strong>Source:</strong></label>
+          <label htmlFor="sourceFilter"><strong>From: </strong></label>
           <select
             id="sourceFilter"
             value={sourceFilter}
@@ -149,7 +149,7 @@ const GetRides = () => {
           </select>
         </div>
         <div>
-          <label htmlFor="destinationFilter"><strong>Destination</strong></label>
+          <label htmlFor="destinationFilter"><strong>To: </strong></label>
           <select
             id="destinationFilter"
             value={destinationFilter}
@@ -169,7 +169,7 @@ const GetRides = () => {
           </select>
         </div>
         <div>
-          <label htmlFor="timeFilter"><strong>Time:</strong></label>
+          <label htmlFor="timeFilter"><strong>Time: </strong></label>
           <input
             id="timeFilter"
             type="datetime-local"
