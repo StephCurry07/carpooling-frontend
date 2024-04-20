@@ -1,6 +1,6 @@
 .card {
   width: 800px;
-  border-radius: 10px; /*Border radius for round edges */
+  border-radius: 10px; 
   padding: 10px;
   margin: 20px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -30,5 +30,5 @@
 }
 
 .dotted-line {
-  border-top: 1px dotted #000; /* Change color and thickness as needed */
+  border-top: 1px dotted #000; 
 }
