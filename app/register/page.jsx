@@ -42,7 +42,9 @@ const RegisterPage = () => {
           }}
           style={{ marginTop: "auto" }}
         >
-          <button className="btn-connect">Register as Driver</button>
+          <button className="btn-connect" style={{ boxShadow: "none" }}>
+            Register as Driver
+          </button>
         </Link>
       </div>
       <div className="register-card">
@@ -76,7 +78,9 @@ const RegisterPage = () => {
           }}
           style={{ marginTop: "auto" }}
         >
-          <button className="btn-connect">Register as Passenger</button>
+          <button className="btn-connect" style={{ boxShadow: "none" }}>
+            Register as Passenger
+          </button>
         </Link>
       </div>
     </div>
