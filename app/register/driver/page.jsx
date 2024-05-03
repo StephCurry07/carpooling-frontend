@@ -1,19 +1,52 @@
 'use client';
 
-import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import styles from '../../styles/user-registration.module.css';
 import { useSearchParams } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+import Papa from 'papaparse';
+import { TextField, Autocomplete } from "@mui/material";
 
-const DriverRegistration = () => {
+const DriverRegistration = ({ data }) => {
   const [formData, setFormData] = useState({
     name: '',
     age: '',
     gender: '',
     phone: '',
     email: '',
+    carName: '',
+    carCapacity: '',
+    mileage: '',
+    fuel_type: '',
   });
+
+  const [carsData, setCarsData] = useState([]);
+  const [cars, setCars] = useState([]);
+  const [selectedCar, setSelectedCar] = useState([]);
+  const [fare, setFare] = useState(0);
+  const [distance, setDistance] = useState(100);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch('https://raw.githubusercontent.com/StephCurry07/carpooling-frontend/master/utils/cars-final.csv');
+      const reader = response.body.getReader();
+      const result = await reader.read();
+      const decoder = new TextDecoder('utf-8');
+      const csvString = decoder.decode(result.value);
+      const { data } = Papa.parse(csvString, { header: true });
+      setCarsData(data);
+      setCars(data.map((car) => car.Combined_Name));
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (selectedCar) {
+      console.log(selectedCar);
+    }
+  }, [selectedCar]);
 
   const searchParams = useSearchParams();
   const connectedAccount = searchParams.get("connectedAccount");
@@ -31,7 +64,7 @@ const DriverRegistration = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem('formData', JSON.stringify(formData));
+    // localStorage.setItem('formData', JSON.stringify(formData));
     router.push({
       pathname: '/create-ride',
     });
@@ -40,10 +73,23 @@ const DriverRegistration = () => {
   // const handleSubmit = (e) => {
   //   e.preventDefault();
   //   console.log(formData);
-    
+ 
   //   localStorage.setItem('formData', JSON.stringify(formData));
   //   window.location.href = '/create-ride';
   // };
+
+  const handleCarChange = (event, newValue) => {
+    setSelectedCar(newValue);
+    // const { carName, value } = event.target;
+    setFormData({
+      ...formData,
+      ['carName']: newValue.Combined_Name,
+      ['carCapacity']: newValue.Seating_Capacity,
+      ['mileage']: newValue.City_Mileage,
+      ['fuel_type']: newValue.Fuel_Type,
+    });
+    console.log(newValue);
+  };
 
   return (
     <div className={styles.container} >
@@ -109,20 +155,24 @@ const DriverRegistration = () => {
 
           <div className={styles.formGroup}>
             <label className={styles.label} >Car name</label>
-            <input
-              type="text"
-              id="car"
-              name="carName"
-              onChange={handleChange}
-              className={styles.inputField}
+            <Autocomplete
+              options={carsData}
+              getOptionLabel={(option) => option.Combined_Name}
+              value={selectedCar.Combined_Name}
+              onChange={handleCarChange}
+              renderInput={(params) => <TextField {...params} label="Select Car" variant="outlined" />}
+              // className={styles.inputField}
             />
+            
           </div>
           <div className={styles.formGroup}>
+
             <label className={styles.label} >Car Capacity(Max. Num of Passengers):</label>
             <input
               type="text"
               id="cap"
               name="carCapacity"
+              value={selectedCar.Seating_Capacity}
               onChange={handleChange}
               className={styles.inputField}
             />

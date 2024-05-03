@@ -4,64 +4,283 @@ import React from "react";
 import { useState, useEffect } from "react";
 import styles from "../styles/user-registration.module.css";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { DateTimePicker } from "@mui/x-date-pickers";
+import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
+import { TextField, Autocomplete } from "@mui/material";
+import axios from "axios";
 
 import { ethers } from "ethers";
 import abi from "../../utils/CarPooling.json";
 
 const contractAddress = abi.contractAddress;
 const contractABI = abi.abi;
+const apiKey = '38424df195msh9ee1dbed38d22d0p1dd980jsn41f9b6f44895';
+const apiKey1 = '9caecd97e6mshc92abd2cf63d44fp140050jsn9eaf39b7a276';
+const apiKey2 = '02c9ea6c62mshefda0d54bedaa0ep1b07dajsnf5b34ba70760';
+
+const getStateid = (str) => {
+  const lowerCaseStr = str.toLowerCase();
+  const formattedStr = lowerCaseStr.replace(/\s+/g, '-');
+  return formattedStr;
+}
 
 const createRide = () => {
-  const [selectedTime, setSelectedTime] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState(null);
   const [secondsSinceEpoch, setSecondsSinceEpoch] = useState(null);
   const [tripDetails, setTripDetails] = useState("");
   const [acNonAc, setAcNonAc] = useState("AC");
-  const [maxPassengers, setMaxPassengers] = useState(0);
+  const [rideFare, setRideFare] = useState(0);
+  // const [mileage, setMileage] = useState(0);
   const [formData, setFormData] = useState("");
-  const [value, setValue] = useState(0);
+  // const [value, setValue] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
-  const [flag, setFlag] = useState(0);
-  const [Pup, setPup] = useState("");
+  // const [flag, setFlag] = useState(0);
   const [selectedDateTime, setselectedDateTime] = useState('');
+  const [sourceInput, setSourceInput] = useState('');
+  const [pickupInput, setPickupInput] = useState('');
+  const [destinationInput, setDestinationInput] = useState('');
+  const [sourceLocationOptions, setSourceLocationOptions] = useState([]);
+  const [destinationLocationOptions, setDestinationLocationOptions] = useState([]);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const [city, setCity] = useState(null);
+  const [pupLocationOptions, setPupLocationOptions] = useState([]);
+  const [state, setState] = useState(null);
+  const [distance, setDistance] = useState(null);
+  const [fuelPrice, setFuelPrice] = useState(0);
+  const [FP, setFP] = useState(0);
+  const [exchangeRate, setExchangeRate] = useState(null);
+  const mileage = formData.mileage;
+  const maxPassengers = formData.carCapacity;
+  
+  useEffect(() => {
+    const fetchExchangeRate = async () => {
+      try {
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const data = await response.json();
+        setExchangeRate(data.rates.INR);
+      } catch (error) {
+        console.error('Error fetching exchange rate:', error);
+      }
+    };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    fetchExchangeRate();
+  }, []);
 
-  const handleChangePass = (e) => {
-    const inputValue = parseInt(e.target.value);
-    if (inputValue == 1) {
-      setFlag(1);
-    }
-    if (
-      (inputValue <= 1 && flag == 1) ||
-      (inputValue >= formData.carCapacity && flag == 1)
-    ) {
-      setErrorMessage("Value must be between 1 and max capacity");
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+      });
     } else {
-      setErrorMessage("");
-      setValue(inputValue);
+      console.log("Geolocation is not supported by this browser.");
     }
-    setValue(parseInt(e.target.value));
-    setFormData({ ...formData, [e.target.name]: inputValue });
+  }, []);
+
+  useEffect(() => {                                                       //  API ADJUSTMENT NOT NEEDED
+    const fetchCity = async () => {
+      if (latitude && longitude) {
+        try {
+          const options = {
+            method: 'GET',
+            url: 'https://forward-reverse-geocoding.p.rapidapi.com/v1/reverse',
+            params: {
+              lat: latitude,
+              lon: longitude,
+              'accept-language': 'en', // Customize language if needed
+              polygon_threshold: '0.0',
+            },
+            headers: {
+              'X-RapidAPI-Key': apiKey2,
+              'X-RapidAPI-Host': 'forward-reverse-geocoding.p.rapidapi.com',
+            },
+          };
+
+          const response = await axios.request(options);
+          console.log(response);
+          const cityName = response.data.display_name;
+          const stateName = response.data.address.state;
+          console.log('City:', cityName);
+          setCity(cityName);
+          setState(stateName);
+          setSourceInput(cityName);
+        } catch (error) {
+          console.error('Error fetching city:', error);
+          setError(error);
+        }
+      } else {
+        console.log('Geolocation is not supported by this browser.');
+      }
+    };
+
+    fetchCity();
+  }, [latitude, longitude]);
+
+  const calcDistance = async (source, destination) => {                   //10 per day
+    try {
+      const options = {
+        method: 'GET',
+        url: 'https://driving-distance-calculator-between-two-points.p.rapidapi.com/data',
+        params: {
+          origin: source,
+          destination: destination
+        },
+        headers: {
+          'X-RapidAPI-Key': apiKey,
+          'X-RapidAPI-Host': 'driving-distance-calculator-between-two-points.p.rapidapi.com'
+        }
+      };
+      const response = await axios.request(options);
+      const dist = response.data.distance_in_kilometers;
+      console.log(response.data);
+      setDistance(dist);
+      return dist;
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  const calcDistance1 = async (sourceInput, destinationInput) => {        //100 per month
+    try {
+      const options = {
+        method: 'POST',
+        url: 'https://distanceto.p.rapidapi.com/distance/route',
+        params: { car: 'true' },
+        // method: 'GET',
+        // url: 'https://driving-distance-calculator-between-two-points.p.rapidapi.com/data',
+        // params: {
+        //   origin: sourceInput,
+        //   destination: destinationInput
+        // },
+        headers: {
+          'content-type': 'application/json',
+          'X-RapidAPI-Key': apiKey2,
+          // 'X-RapidAPI-Key': '38424df195msh9ee1dbed38d22d0p1dd980jsn41f9b6f44895',
+          'X-RapidAPI-Host': 'distanceto.p.rapidapi.com'
+          // J';_q$5}tR:yAG29"]nc@^
+          // 'X-RapidAPI-Host': 'driving-distance-calculator-between-two-points.p.rapidapi.com'
+        },
+        data: {
+          route: [
+            {
+              country: 'IND',
+              name: sourceInput
+            },
+            {
+              country: 'IND',
+              name: destinationInput
+            }
+          ]
+        }
+      };
+      const response = await axios.request(options);
+      const dist = response.data.route.car.distance;
+      console.log(dist);
+      setDistance(dist);
+      return dist;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // NEW PASSENGER COUNT HANDLER and EASY
+  const handleChangeCarCap = (event) => {
+    const newValue = parseInt(event.target.value);
+    if (newValue < 1) {
+      setErrorMessage('Value cannot be less than 1.');
+      event.target.value = 1;
+    } else if (newValue > maxPassengers) {
+      setErrorMessage(`Value cannot be greater than car capacity.`);
+      event.target.value = maxPassengers;
+    } else {
+      setErrorMessage(null);
+    }
+  };
+
+  //  OLDER PASSENGER COUNT HANDLER
+
+  // const handleChangePass = (e) => {
+  //   const inputValue = parseInt(e.target.value);
+  //   if (inputValue == 1) {
+  //     setFlag(1);
+  //   }
+  //   if (
+  //     (inputValue <= 1 && flag == 1) ||
+  //     (inputValue >= formData.carCapacity && flag == 1)
+  //   ) {
+  //     setErrorMessage("Value must be between 1 and max capacity");
+  //   } else {
+  //     setErrorMessage("");
+  //     setValue(inputValue);
+  //   }
+  //   setValue(parseInt(e.target.value));
+  //   setFormData({ ...formData, [e.target.name]: inputValue });
+  // };
+
+  useEffect(() => {
+    if(state !== null){
+      const State = getStateid(state);
+      const fetchFuelPrice = async () => {
+        const options = {
+          method: 'GET',
+          url: `https://daily-petrol-diesel-lpg-cng-fuel-prices-in-india.p.rapidapi.com/v1/fuel-prices/today/india/${State}`,
+          headers: {
+            'X-RapidAPI-Key': '02c9ea6c62mshefda0d54bedaa0ep1b07dajsnf5b34ba70760',
+            'X-RapidAPI-Host': 'daily-petrol-diesel-lpg-cng-fuel-prices-in-india.p.rapidapi.com'
+          }
+        };
+
+        try {
+          const response = await axios.request(options);
+          if (formData.fuel_type === 'Petrol') {
+            setFuelPrice(response.data.fuel.petrol.retailPrice);
+            console.log('yes');
+          }
+          else if (formData.fuel_type === 'Diesel') {  
+            setFuelPrice(response.data.fuel.diesel.retailPrice)
+          }
+          else if (formData.fuel_type === 'CNG') {
+            setFuelPrice(response.data.fuel.cng.retailPrice)
+          }
+          console.log(response.data.fuel);
+        } catch (error) {
+          console.error(error);
+        }
+
+      };
+      if (formData.fuel_type === 'Electric') {
+        setFuelPrice(0.5);
+      }
+      //CALC FARE FOR HYBRID DIRECTLY... NO OTHER METHOD SUITABLE AS FUEL PRICE NEEDS TO BE ADJUSTED (SEE LATER)
+      else {
+        fetchFuelPrice();
+      }
+    }
+  }, [state]);
+
+  // Fare Calculation
+  useEffect(() => {
+    const calcFare = () => {
+      if (mileage && exchangeRate) {
+        const fuelPriceUSD = fuelPrice / exchangeRate;
+        console.log("Fuel Price: ", fuelPrice);
+        console.log("er: ", exchangeRate);
+        console.log("FuelpriceUSD: ", fuelPriceUSD);
+        console.log("Mileage: ", mileage);
+        console.log("Distance: ", distance);
+        setFP(fuelPriceUSD);
+        const fare = (distance / mileage) * fuelPriceUSD;
+        // const fare = (1000 / mileage) * fuelPriceUSD;
+        setRideFare(fare);
+        console.log("Fare: ", fare);
+      }
+    };
+    calcFare();
+  },[distance, fuelPrice, exchangeRate]);
 
   const handleChangeRad = (e) => {
     setAcNonAc(e.target.value);
   };
-
-
- 
-  
-  useEffect(() => {
-    const savedFormData = localStorage.getItem('formData');
-    if (savedFormData) {
-      setFormData(JSON.parse(savedFormData));
-    }
-  }, []);
 
   useEffect(() => {
     if (!formData) {
@@ -73,26 +292,21 @@ const createRide = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (formData) {
-      setMaxPassengers(formData.carCapacity);
-    }
-  }, [formData, tripDetails]);
 
   useEffect(() => {
-    console.log('effect' + selectedTime);
-    if (tripDetails !== "") {
+    if (FP !== 0 && tripDetails !== "") {
       createNewRide();
     }
-  }, [tripDetails]);
+  }, [FP, tripDetails]);
 
   const handleTimeChange = (e) => {
     const selectedDateTime = e instanceof Date ? e : new Date(e);
     const selectedDateTimeUTC = new Date(selectedDateTime.getTime() + selectedDateTime.getTimezoneOffset() * 60000);
-    console.log('Selected time:', selectedDateTime);
-  
+    // console.log('Selected time:', selectedDateTime);
+
     const secondsSinceEpoch = Math.floor(selectedDateTimeUTC.getTime() / 1000);
     setselectedDateTime(selectedDateTime);
+    // console.log(new Date());
     setSecondsSinceEpoch(secondsSinceEpoch);
   };
 
@@ -110,12 +324,11 @@ const createRide = () => {
         contractABI,
         signer
       );
-  
+
       console.log(tripDetails);
       await CarPoolingContract.createRide(
         maxPassengers,
-        // formData.rideFare,
-        1, // to be implemented
+        BigInt(Math.round(rideFare)),
         BigInt(secondsSinceEpoch),
         tripDetails
       );
@@ -125,19 +338,124 @@ const createRide = () => {
     }
   };
 
+  const onSourceInputChange = (event, newInputValue) => {
+    setSourceInput(newInputValue);
+  };
+
+  const onDestinationInputChange = (event, newInputValue) => {
+    setDestinationInput(newInputValue);
+  };
+
+  const onPickupInputChange = (event, newInputValue) => {
+    setPickupInput(newInputValue);
+    console.log(mileage);
+  };
+
+
+  //SAVING API USAGE
+
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      try {
+        const options = {
+          method: 'GET',
+          url: 'https://place-autocomplete1.p.rapidapi.com/autocomplete/json',
+          params: {
+            input: city,
+            radius: '500',
+          },
+          headers: {
+            'X-RapidAPI-Key': apiKey,
+            'X-RapidAPI-Host': 'place-autocomplete1.p.rapidapi.com',
+          },
+        };
+        const response = await axios.request(options);
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchSuggestions();
+  }, [city]);
+
+  const fetchSuggestions = async (input, setLocationOptions) => {
+    try {
+      const options = {
+        method: 'GET',
+        url: 'https://place-autocomplete1.p.rapidapi.com/autocomplete/json',
+        params: {
+          input: input,
+          radius: '500',
+        },
+        headers: {
+          'X-RapidAPI-Key': apiKey1,
+          'X-RapidAPI-Host': 'place-autocomplete1.p.rapidapi.com',
+        },
+      };
+      const response = await axios.request(options);
+      setLocationOptions(
+        response.data.predictions.map((suggestion) => ({
+          label: suggestion.description,
+          value: suggestion.place_id,
+        }))
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+  // UNWANTED API USAGE...UNCOMMENT WHEN FUEL PRICE UPDATES CORRECTLY
+
+  useEffect(() => {
+    if (sourceInput) {
+      fetchSuggestions(sourceInput, setSourceLocationOptions);
+      console.log(sourceLocationOptions);
+    }
+  }, [sourceInput]);
+
+
+  useEffect(() => {
+    if (pickupInput) {
+      fetchSuggestions(pickupInput, setPupLocationOptions);
+    }
+  }, [pickupInput]);
+
+  useEffect(() => {
+    if (destinationInput) {
+      fetchSuggestions(destinationInput, setDestinationLocationOptions);
+    }
+  }, [destinationInput]);
+
+  // const locationOptions = [
+  //   { label: 'New York City, NY', value: 'New York City, NY' },
+  //   { label: 'Los Angeles, CA', value: 'Los Angeles, CA' },
+  //   { label: 'Chicago, IL', value: 'Chicago, IL' },
+  //   { label: 'Houston, TX', value: 'Houston, TX' },
+  // ];
+
+  //UNCOMMENT WHEN DONE.... FOR REDUCTION IN API USAGE
+  useEffect(() => {
+      if (pickupInput && destinationInput) {
+        calcDistance(pickupInput, destinationInput);
+      }
+    }, [pickupInput, destinationInput]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      // Car details
 
-    // Car details
-    const newCarDetails = `${formData.carName} ${formData.maxPassengers || maxPassengers
-      } Seater ${acNonAc}`;
-    // console.log('Car details:', newCarDetails);
+      const newCarDetails = `${formData.carName} ${maxPassengers} Seater ${acNonAc}`;
 
-    // Trip details
-    const newTripDetails=`Source: ${formData.source} + Destination: ${formData.destination} + Car Details: ${newCarDetails} + Driver Details: ${formData.name}-${formData.age}-${formData.gender} + Pick up point: ${formData.pup} + Distance: 2km + Gas Price: 100 + time: ${selectedDateTime}`;
-
-    setTripDetails(newTripDetails);
+      // Trip details
+      const newTripDetails = `Source: ${sourceInput} + Destination: ${destinationInput} + Car Details: ${newCarDetails} + Driver Details: ${formData.name}-${formData.age}-${formData.gender} + Pick up point: ${pickupInput} + Distance: ${distance} + Gas Price: ${FP} + time: ${selectedDateTime}`;
+      console.log(newTripDetails);
+      setTripDetails(newTripDetails);
+    } catch (error) {
+      console.error('Error calculating distance:', error);
+    }
   };
 
   return (
@@ -221,10 +539,10 @@ const createRide = () => {
             <input
               type="number"
               name="maxPassengers"
-              defaultValue={formData.carCapacity}
-              min={1}
-              max={formData.carCapacity}
-              onChange={handleChangePass}
+              defaultValue={maxPassengers}
+              // min={1}
+              // max={formData.carCapacity}
+              onChange={handleChangeCarCap}
               className={styles.inputField}
             />
             {errorMessage && (
@@ -232,48 +550,121 @@ const createRide = () => {
             )}
           </div>
 
-          <div className={styles.formGroup}>
+          <div className={styles.formGroup} id="from">
             <label className={styles.label}>Source:</label>
-            <input
+            <Autocomplete
+              inputValue={sourceInput.label}
+              isOptionEqualToValue={(option, value) =>
+                option.value === value.value
+              }
+              onInputChange={onSourceInputChange}
+              options={sourceLocationOptions}
+
+              // IN PLACE OF PLACE AUTOCOMPLETE API -> API USAGE 4
+              // options={locationOptions}
+
+              id="source-input"
+              sx={{ width: 400 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Enter source location"
+                  InputLabelProps={{ shrink: true }}
+                />
+              )}
+              selectOnFocus
+            />
+
+            {/* In case Autocomplete doesn't work due to API error or something else */}
+
+            {/* <input
               type="text"
               name="source"
+              value={source}
               className={styles.inputField}
-              onChange={handleChange}
+              onChange={handleSourceInputChange}
               required
-            />
+            /> */}
           </div>
 
-          <div className={styles.formGroup}>
+
+          <div className={styles.formGroup} id="to">
             <label className={styles.label}>Destination:</label>
-            <input
+            <Autocomplete
+              inputValue={destinationInput}
+              onInputChange={onDestinationInputChange}
+              id="destination-input"
+              isOptionEqualToValue={(option, value) =>
+                option.value === value.value
+              }
+              options={destinationLocationOptions}
+              // IN PLACE OF PLACE AUTOCOMPLETE API -> API USAGE 4
+              // options={locationOptions}
+
+              sx={{ width: 400 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Enter destination location"
+                  InputLabelProps={{ shrink: true }}
+                />
+              )}
+              selectOnFocus
+            />
+
+            {/* In case Autocomplete doesn't work due to API error or something else */}
+
+            {/* <input
               type="text"
               name="destination"
+              value={destination}
               className={styles.inputField}
-              onChange={handleChange}
+              onChange={handleDestinationInputChange}
               required
-            />
+            /> */}
+
+
           </div>
 
           <div className={styles.formGroup}>
             <label className={styles.label}>Pickup Point:</label>
-            <input
-              type="text"
-              name="pup"
-              className={styles.inputField}
-              onChange={handleChange}
-              required
+            <Autocomplete
+              onInputChange={onPickupInputChange}
+              id="pup-input"
+              isOptionEqualToValue={(option, value) =>
+                option.value === value.value
+              }
+              options={pupLocationOptions}
+
+              // IN PLACE OF PLACE AUTOCOMPLETE API -> API USAGE 4
+              // options={locationOptions}
+
+              sx={{ width: 400 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Enter pickup point"
+                  name="pup"
+                  InputLabelProps={{ shrink: true }}
+                />
+              )}
+              selectOnFocus
             />
+
           </div>
           <div className={styles.formGroup}>
             <label className={styles.label}>Choose date and time for ride:</label>
-            <DateTimePicker value={selectedTime} onChange={handleTimeChange} />
+            <DateTimePicker value={selectedTime} onChange={handleTimeChange}
+              minDateTime={new Date()} maxDateTime={new Date(new Date().setDate(new Date().getDate() + 2))} />
           </div>
           <br />
           <button type="submit" className={`${styles.submitButton}`}>
             Submit
           </button>
+          {distance && <p>Distance: {distance} kilometers</p>}
         </form>
       </div>
+      {/* <script src="http://localhost:8097"></script> */}
     </LocalizationProvider>
   );
 };
