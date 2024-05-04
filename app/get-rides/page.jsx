@@ -6,6 +6,9 @@ import abi from "../../utils/CarPooling.json";
 import styles from "../styles/get-rides.module.css";
 import { useSearchParams } from "next/navigation";
 import { ErrorDecoder } from "ethers-decode-error";
+import { Autocomplete, TextField } from "@mui/material";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
+import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 
 const GetRides = () => {
   const [allRides, setAllRides] = useState([]);
@@ -81,16 +84,16 @@ const GetRides = () => {
   useEffect(() => {
     const currentDateTime = new Date(Date.now());
     const currentTimePlusfive = new Date(
-      currentDateTime.getTime() + currentDateTime.getTimezoneOffset() * 60000 + 5*60000
+      currentDateTime.getTime() + currentDateTime.getTimezoneOffset() * 60000 + 5 * 60000
     );
-  
+
     const filtered = allRides.filter((ride) => {
       const { source, destination } = extractSourceAndDestination(
         ride.tDetails
       );
-  
+
       const rideTime = new Date(Number(ride.time) * 1000);
-  
+
       return (
         (!sourceFilter || source === sourceFilter) &&
         (!destinationFilter || destination === destinationFilter) &&
@@ -100,7 +103,7 @@ const GetRides = () => {
     });
     setFilteredRides(filtered);
   }, [sourceFilter, destinationFilter, timeFilter, allRides]);
-  
+
 
   const bookRide = async (rideId, rideFare) => {
     try {
@@ -131,8 +134,19 @@ const GetRides = () => {
     <div className={styles.pageContainer}>
       <div className={styles.filterContainer}>
         <div>
-          <label htmlFor="sourceFilter"><strong>From: </strong></label>
-          <select
+          {/* <label htmlFor="sourceFilter"><strong>From: </strong></label> */}
+          <Autocomplete
+            id="sourceFilter"
+            value={sourceFilter}
+            onChange={(event, newValue) => setSourceFilter(newValue)}
+            options={allRides.map((ride) => {
+              const { source } = extractSourceAndDestination(ride.tDetails);
+              return source;
+            })}
+            renderInput={(params) => <TextField {...params} label="Select Source" variant="outlined" />}
+            sx={{ width: 400 }}
+          />
+          {/* <select
             id="sourceFilter"
             value={sourceFilter}
             onChange={(e) => setSourceFilter(e.target.value)}
@@ -146,11 +160,29 @@ const GetRides = () => {
                 </option>
               );
             })}
-          </select>
+          </select> */}
         </div>
         <div>
-          <label htmlFor="destinationFilter"><strong>To: </strong></label>
-          <select
+          {/* <label htmlFor="destinationFilter"><strong>To: </strong></label> */}
+          <Autocomplete
+            id="destinationFilter"
+            value={destinationFilter}
+            onChange={(event, newValue) => setDestinationFilter(newValue)}
+            options={allRides.map((ride) => {
+              const { destination } = extractSourceAndDestination(ride.tDetails);
+              return destination;
+            })}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Select Destination"
+                variant="outlined"
+                sx={{ width: 400 }}
+              />
+            )}
+          />
+
+          {/* <select
             id="destinationFilter"
             value={destinationFilter}
             onChange={(e) => setDestinationFilter(e.target.value)}
@@ -166,27 +198,36 @@ const GetRides = () => {
                 </option>
               );
             })}
-          </select>
+          </select> */}
         </div>
         <div>
-          <label htmlFor="timeFilter"><strong>Time: </strong></label>
-          <input
+          {/* <label htmlFor="timeFilter"><strong>Time: </strong></label> */}
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DateTimePicker
+              id="timeFilter"
+              value={timeFilter}
+              minDate={new Date()}
+              onChange={(newValue) => setTimeFilter(newValue)}
+              TextField={(params) => <TextField {...params} />}
+            />
+            </LocalizationProvider>
+            {/* <input
             id="timeFilter"
             type="datetime-local"
             value={timeFilter}
             min={new Date().toISOString().split("T")[0] + "T00:00"}
             onChange={(e) => setTimeFilter(e.target.value)}
-          />
+          /> */}
         </div>
       </div>
       <div className={styles.cardContainer}>
-      {filteredRides.length > 0 ? (
-        filteredRides.map((ride) => (
-          <GetRidesCard key={ride.rideId} ride={ride} bookRide={bookRide} exchangeRate={exchangeRate}/>
-        ))
-      ) : (
-        <p>No Rides Available</p>
-      )}
+        {filteredRides.length > 0 ? (
+          filteredRides.map((ride) => (
+            <GetRidesCard key={ride.rideId} ride={ride} bookRide={bookRide} exchangeRate={exchangeRate} />
+          ))
+        ) : (
+          <p>No Rides Available</p>
+        )}
       </div>
     </div>
   );
