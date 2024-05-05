@@ -6,6 +6,7 @@ import styles from "../styles/user-registration.module.css";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { TextField, Autocomplete } from "@mui/material";
+import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import axios from "axios";
 
 import { ethers } from "ethers";
@@ -25,6 +26,7 @@ const getStateid = (str) => {
 
 const createRide = () => {
   const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [secondsSinceEpoch, setSecondsSinceEpoch] = useState(null);
   const [tripDetails, setTripDetails] = useState("");
   const [acNonAc, setAcNonAc] = useState("AC");
@@ -50,7 +52,7 @@ const createRide = () => {
   const [exchangeRate, setExchangeRate] = useState(null);
   const mileage = formData.mileage;
   const maxPassengers = formData.carCapacity;
-  
+
   useEffect(() => {
     const fetchExchangeRate = async () => {
       try {
@@ -125,7 +127,7 @@ const createRide = () => {
           destination: destination
         },
         headers: {
-          'X-RapidAPI-Key': apiKey2,
+          'X-RapidAPI-Key': apiKey1,
           'X-RapidAPI-Host': 'driving-distance-calculator-between-two-points.p.rapidapi.com'
         }
       };
@@ -210,7 +212,7 @@ const createRide = () => {
   // };
 
   useEffect(() => {
-    if(state !== null){
+    if (state !== null) {
       const State = getStateid(state);
       const fetchFuelPrice = async () => {
         const options = {
@@ -228,7 +230,7 @@ const createRide = () => {
             setFuelPrice(response.data.fuel.petrol.retailPrice);
             console.log('yes');
           }
-          else if (formData.fuel_type === 'Diesel') {  
+          else if (formData.fuel_type === 'Diesel') {
             setFuelPrice(response.data.fuel.diesel.retailPrice)
           }
           else if (formData.fuel_type === 'CNG') {
@@ -268,7 +270,7 @@ const createRide = () => {
       }
     };
     calcFare();
-  },[distance, fuelPrice, exchangeRate]);
+  }, [distance, fuelPrice, exchangeRate]);
 
   const handleChangeRad = (e) => {
     setAcNonAc(e.target.value);
@@ -291,7 +293,32 @@ const createRide = () => {
     }
   }, [FP, tripDetails]);
 
+  const handleDateChange = (e) => {
+    const selectedDate = e instanceof Date ? e : new Date(e);
+    setSelectedDate(selectedDate);
+  };
+
   const handleTimeChange = (e) => {
+    const selectedTime = e instanceof Date ? e : new Date(e);
+    setSelectedTime(selectedTime);
+  };
+  
+  useEffect(() => {
+    if (selectedDate && selectedTime) {
+      const newDateTime = new Date(
+        selectedDate.getFullYear(), 
+        selectedDate.getMonth(), 
+        selectedDate.getDate(), 
+        selectedTime.getHours(), 
+        selectedTime.getMinutes(), 
+        selectedTime.getSeconds(),
+        selectedTime.getMilliseconds()
+      );
+      handleDateTimeChange(newDateTime);
+    }
+  }, [selectedDate, selectedTime]);
+
+  const handleDateTimeChange = (e) => {
     const selectedDateTime = e instanceof Date ? e : new Date(e);
     const selectedDateTimeUTC = new Date(selectedDateTime.getTime() + selectedDateTime.getTimezoneOffset() * 60000);
     // console.log('Selected time:', selectedDateTime);
@@ -429,10 +456,10 @@ const createRide = () => {
 
   //UNCOMMENT WHEN DONE.... FOR REDUCTION IN API USAGE
   useEffect(() => {
-      if (pickupInput && destinationInput) {
-        calcDistance(pickupInput, destinationInput);
-      }
-    }, [pickupInput, destinationInput]);
+    if (pickupInput && destinationInput) {
+      calcDistance(pickupInput, destinationInput);
+    }
+  }, [pickupInput, destinationInput]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -545,7 +572,7 @@ const createRide = () => {
           <div className={styles.formGroup} id="from">
             <label className={styles.label}>Source:</label>
             <Autocomplete
-              inputValue={sourceInput.label}
+              inputValue={sourceInput}
               isOptionEqualToValue={(option, value) =>
                 option.value === value.value
               }
@@ -556,7 +583,7 @@ const createRide = () => {
               // options={locationOptions}
 
               id="source-input"
-              sx={{ width: 400 }}
+              sx={{ width: '85%' }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -583,6 +610,7 @@ const createRide = () => {
           <div className={styles.formGroup} id="to">
             <label className={styles.label}>Destination:</label>
             <Autocomplete
+              className={styles.label}
               inputValue={destinationInput}
               onInputChange={onDestinationInputChange}
               id="destination-input"
@@ -593,7 +621,7 @@ const createRide = () => {
               // IN PLACE OF PLACE AUTOCOMPLETE API -> API USAGE 4
               // options={locationOptions}
 
-              sx={{ width: 400 }}
+              sx={{ width: '85%' }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -631,7 +659,7 @@ const createRide = () => {
               // IN PLACE OF PLACE AUTOCOMPLETE API -> API USAGE 4
               // options={locationOptions}
 
-              sx={{ width: 400 }}
+              sx={{ width: '85%' }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -645,19 +673,43 @@ const createRide = () => {
 
           </div>
           <div className={styles.formGroup}>
-            <label className={styles.label}>Choose date and time for ride:</label>
-            <DateTimePicker value={selectedTime} onChange={handleTimeChange}
-              minDateTime={new Date()} maxDateTime={new Date(new Date().setDate(new Date().getDate() + 2))} />
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column'}}>
+                <label  className={styles.label}>Choose Date:</label>
+                <DatePicker
+                  id="date-picker"
+                  minDate={new Date()}
+                  maxDate={new Date(new Date().setDate(new Date().getDate() + 2))}
+                  onChange={(newValue) => handleDateChange(newValue)}
+                  TextField={(params) => <TextField {...params} variant="outlined" />}
+                  sx={{width:'90%'}}
+                />
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column'}}>
+                <label className={styles.label}>Choose Time:</label>
+                <TimePicker
+                  id="time-picker"
+                  value={selectedTime}
+                  onChange={(newValue) => handleTimeChange(newValue)}
+                  TextField={(params) => <TextField {...params} variant="outlined" />}
+                  sx={{width:'90%'}}
+                />
+              </div>
+            </div>
+            {/* <DateTimePicker value={selectedTime} onChange={handleTimeChange}
+              minDateTime={new Date()} maxDateTime={new Date(new Date().setDate(new Date().getDate() + 2))}
+              sx={{ width: 400 }} /> */}
           </div>
           <br />
-          <button type="submit" className={`${styles.submitButton}`}>
+          <button type="submit" className={`${styles.submitButton} ${styles.center__relative}`}>
             Submit
           </button>
-          {distance && (
-            <p style={styles.distance}>
-              You will be travelling {distance} kilometers.
-            </p>
-          )}
+          {/* {distance && ( */}
+          <p className={styles.distance}>
+            You will be travelling {distance} kilometers.
+          </p>
+          {/* )} */}
         </form>
       </div>
       {/* <script src="http://localhost:8097"></script> */}
