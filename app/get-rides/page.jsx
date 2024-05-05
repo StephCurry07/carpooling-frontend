@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { ethers } from "ethers";
 import GetRidesCard from "@app/components/GetRidesCard";
 import abi from "../../utils/CarPooling.json";
@@ -16,10 +16,12 @@ const GetRides = () => {
   const [timeFilter, setTimeFilter] = useState("");
   const contractAddress = abi.contractAddress;
   const contractABI = abi.abi;
+  const [currentPage, setCurrentPage] = useState(0);
   const searchParams = useSearchParams();
   const connectedAccount = searchParams.get("connectedAccount");
   const balance = searchParams.get("balance");
   const errorDecoder = ErrorDecoder.create([contractABI]);
+  const containerRef = useRef(null);
 
   const getAllRides = async () => {
     if (window.ethereum) {
@@ -126,6 +128,13 @@ const GetRides = () => {
       alert(decodedError.args[0]);
     }
   };
+  const handlePrev = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+  };
+  
+  const handleNext = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, Math.ceil(filteredRides.length / 3) - 1));
+  };
 
   return (
     <div className={styles.pageContainer}>
@@ -179,14 +188,18 @@ const GetRides = () => {
           />
         </div>
       </div>
-      <div className={styles.cardContainer}>
-      {filteredRides.length > 0 ? (
-        filteredRides.map((ride) => (
-          <GetRidesCard key={ride.rideId} ride={ride} bookRide={bookRide} exchangeRate={exchangeRate}/>
-        ))
-      ) : (
-        <p>No Rides Available</p>
-      )}
+      <div className={styles.cardContainer} ref={containerRef}>
+        {filteredRides.slice(currentPage * 3, (currentPage + 1) * 3).map((ride) => (
+          <GetRidesCard key={ride.rideId} ride={ride} exchangeRate={exchangeRate} />
+        ))}
+      </div>
+      <div className={styles.navigation}>
+        <button className={styles.navButton} onClick={handlePrev} disabled={currentPage === 0}>
+          Previous
+        </button>
+        <button className={styles.navButton} onClick={handleNext} disabled={(currentPage + 1) * 3 >= filteredRides.length}>
+          Next
+        </button>
       </div>
     </div>
   );

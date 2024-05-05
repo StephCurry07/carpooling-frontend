@@ -18,6 +18,7 @@ import StraightIcon from '@mui/icons-material/Straight';
 
 
 
+
 const GetRidesCard = ({ ride, bookRide, exchangeRate }) => {
   console.log(ride.tDetails.toString());
   const [
@@ -45,6 +46,8 @@ const GetRidesCard = ({ ride, bookRide, exchangeRate }) => {
   const formattedDate = dateTime.toLocaleDateString();
   const formattedTime = dateTime.toLocaleTimeString();
 
+  
+
   return (
     <div className={styles.card}>
       <div className={styles.imageContainer}>
@@ -58,25 +61,19 @@ const GetRidesCard = ({ ride, bookRide, exchangeRate }) => {
         <ul>
           <li><PaymentsIcon /> Cost: {fareInUSD}$</li>
           <li><PlaceIcon /> {source}</li>
-          <li><HomeIcon /> {destination}</li>
-          <li><StraightIcon /> {distance}</li>
           <li><CalendarTodayIcon /> {formattedDate}</li>
+          <li><HomeIcon /> {destination}</li>
           <li><AccessTimeIcon /> {formattedTime}</li>
         </ul>
       </div>
-      <div className={styles.cardetails}>
-        <ul>
-          <li><GroupIcon /> Max Passengers: {ride.mPassengers.toString()}</li>
-          <li><PersonIcon /> Current Passengers: {ride.passengers.toString()}</li>
-          <li><LocaltaxiIcon /> {carDetails}</li>
-          <li><LocalGasStationIcon /> {gasPrice}</li>
-          <li><CreditCardIcon /> {driverDetails}</li>
-          <li><HailIcon /> {pickPoint}</li>
-        </ul>
-      </div>
-      <button className={styles.bookButton} onClick={BookRideHandler}>
-        BOOK
-      </button>
+      <div className={styles.bookButtonContainer}>
+  <button className={styles.bookButton} onClick={BookRideHandler}>
+    BOOK
+  </button>
+  <button className={styles.bookButton} onClick={BookRideHandler}>
+    VIEW RIDE
+  </button>
+</div>
     </div>
   );
 };
