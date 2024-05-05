@@ -1,0 +1,45 @@
+/* Modal Overlay */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 1000; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Modal Content */
+  .modalContent {
+    background-color: #ffffff; 
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 80%; 
+    max-height: 80%; 
+    overflow: auto; 
+    position: relative; /* Ensure relative positioning for absolute children */
+  }
+  
+  .closeButton {
+    position: relative;
+    top: 10px;
+    bottom: 20px; /* Adjust the distance from the bottom */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center horizontally */
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  .closeButton:hover {
+    color: #d1bdbd; 
+  }
+
+  .ridedetails ul {
+    list-style: none;
+    width: 90%;
+    font-size: smaller;
+  }
+  

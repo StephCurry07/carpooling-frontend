@@ -1,5 +1,7 @@
 "use client";
 import { useSearchParams } from "next/navigation";
+import React, { useState, useEffect,useRef } from "react";
+import EnlargedCardModal from "@app/components/EnlargedCardModal";
 import styles from "../styles/get-rides.module.css";
 import PlaceIcon from '@mui/icons-material/Place';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
@@ -31,9 +33,16 @@ const GetRidesCard = ({ ride, bookRide, exchangeRate }) => {
     gasPrice,
     time,
   ] = ride.tDetails.toString().split(" + ");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRide, setSelectedRide] = useState(null);
   const searchParams = useSearchParams();
   const connectedAccount = searchParams.get("connectedAccount");
   const balance = searchParams.get("balance");
+
+  const handleViewRide = (ride) => {
+    setSelectedRide(ride);
+    setIsModalOpen(true);
+  };
 
   const BookRideHandler = async () => {
     await bookRide(ride.rideId, ride.rideFare.toString());
@@ -70,10 +79,13 @@ const GetRidesCard = ({ ride, bookRide, exchangeRate }) => {
   <button className={styles.bookButton} onClick={BookRideHandler}>
     BOOK
   </button>
-  <button className={styles.bookButton} onClick={BookRideHandler}>
+  <button className={styles.bookButton} onClick={() => handleViewRide(ride)}>
     VIEW RIDE
   </button>
 </div>
+{isModalOpen && (
+      <EnlargedCardModal ride={selectedRide} onClose={() => setIsModalOpen(false)} />
+    )}
     </div>
   );
 };
