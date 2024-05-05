@@ -1,28 +1,14 @@
 "use client";
-import { useSearchParams } from "next/navigation";
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState } from "react";
 import EnlargedCardModal from "@app/components/EnlargedCardModal";
 import styles from "../styles/get-rides.module.css";
 import PlaceIcon from '@mui/icons-material/Place';
-import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
-import PersonIcon from '@mui/icons-material/Person';
-import GroupIcon from '@mui/icons-material/Group';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
-import HailIcon from '@mui/icons-material/Hail';
 import PaymentsIcon from '@mui/icons-material/Payments';
-import LocaltaxiIcon from '@mui/icons-material/LocalTaxi';
 import HomeIcon from '@mui/icons-material/Home';
-import StraightIcon from '@mui/icons-material/Straight';
-
-
-
-
 
 const GetRidesCard = ({ ride, bookRide, exchangeRate }) => {
-  console.log(ride.tDetails.toString());
   const [
     source,
     destination,
@@ -33,15 +19,18 @@ const GetRidesCard = ({ ride, bookRide, exchangeRate }) => {
     gasPrice,
     time,
   ] = ride.tDetails.toString().split(" + ");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRide, setSelectedRide] = useState(null);
-  const searchParams = useSearchParams();
-  const connectedAccount = searchParams.get("connectedAccount");
-  const balance = searchParams.get("balance");
+  const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
 
-  const handleViewRide = (ride) => {
+  const handleViewRide = (ride, event) => {
     setSelectedRide(ride);
     setIsModalOpen(true);
+    setModalPosition({
+      top: event.currentTarget.offsetTop + event.currentTarget.clientHeight + 10,
+      left: event.currentTarget.offsetLeft
+    });
   };
 
   const BookRideHandler = async () => {
@@ -55,37 +44,47 @@ const GetRidesCard = ({ ride, bookRide, exchangeRate }) => {
   const formattedDate = dateTime.toLocaleDateString();
   const formattedTime = dateTime.toLocaleTimeString();
 
-  
-
   return (
-    <div className={styles.card}>
+    <div className={styles.card} onMouseLeave={() => setIsModalOpen(false)}>
       <div className={styles.imageContainer}>
-      {ride.mPassengers.toString() <= 4 ? (
+        {ride.mPassengers.toString() <= 4 ? (
           <img src="/images/car.png" alt="Small Car" className={styles.image} />
         ) : (
           <img src="/images/car2.png" alt="Big Car" className={styles.image} />
         )}
       </div>
-      <div className={styles.ridedetails}>
+
+      <div className={styles.tripdetails}>
         <ul>
-          <li><PaymentsIcon /> Cost: {fareInUSD}$</li>
           <li><PlaceIcon /> {source}</li>
-          <li><CalendarTodayIcon /> {formattedDate}</li>
           <li><HomeIcon /> {destination}</li>
-          <li><AccessTimeIcon /> {formattedTime}</li>
+          
         </ul>
       </div>
+      <div className={styles.dateTime}>
+            <div className={styles.date}>
+              <CalendarTodayIcon /> {formattedDate}
+            </div>
+            <div className={styles.time}>
+              <AccessTimeIcon /> {formattedTime}
+            </div>
+      </div>
+       <div className={`${styles.costContainer}`}><PaymentsIcon></PaymentsIcon><span className={styles.cost}> Cost: {fareInUSD}$</span></div>
       <div className={styles.bookButtonContainer}>
-  <button className={styles.bookButton} onClick={BookRideHandler}>
-    BOOK
-  </button>
-  <button className={styles.bookButton} onClick={() => handleViewRide(ride)}>
-    VIEW RIDE
-  </button>
-</div>
-{isModalOpen && (
-      <EnlargedCardModal ride={selectedRide} onClose={() => setIsModalOpen(false)} />
-    )}
+        <button className={styles.bookButton} onClick={BookRideHandler}>
+          BOOK
+        </button>
+        <button className={styles.bookButton} onClick={(e) => handleViewRide(ride, e)}>
+          VIEW RIDE
+        </button>
+      </div>
+      {isModalOpen && (
+        <EnlargedCardModal
+          ride={selectedRide}
+          onClose={() => setIsModalOpen(false)}
+          position={modalPosition}
+        />
+      )}
     </div>
   );
 };

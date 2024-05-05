@@ -9,6 +9,7 @@ import { ErrorDecoder } from "ethers-decode-error";
 import { Autocomplete, TextField } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 const GetRides = () => {
   const [allRides, setAllRides] = useState([]);
@@ -148,7 +149,7 @@ const GetRides = () => {
             id="sourceFilter"
             value={sourceFilter}
             onChange={(event, newValue) => setSourceFilter(newValue)}
-            options={allRides.map((ride) => {
+            options={filteredRides.map((ride) => {
               const { source } = extractSourceAndDestination(ride.tDetails);
               return source;
             })}
@@ -177,7 +178,7 @@ const GetRides = () => {
             id="destinationFilter"
             value={destinationFilter}
             onChange={(event, newValue) => setDestinationFilter(newValue)}
-            options={allRides.map((ride) => {
+            options={filteredRides.map((ride) => {
               const { destination } = extractSourceAndDestination(ride.tDetails);
               return destination;
             })}
@@ -236,10 +237,10 @@ const GetRides = () => {
       </div>
       <div className={styles.navigation}>
         <button className={styles.navButton} onClick={handlePrev} disabled={currentPage === 0}>
-          Previous
+        <ChevronLeft />
         </button>
         <button className={styles.navButton} onClick={handleNext} disabled={(currentPage + 1) * 3 >= filteredRides.length}>
-          Next
+        <ChevronRight />
         </button>
       </div>
     </div>

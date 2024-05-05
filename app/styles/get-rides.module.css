@@ -42,7 +42,7 @@
   border-radius: 5px;
   padding: 10px;
   margin: 15px;
-  width: 400px; /* Adjust width as needed */
+  width: 370px; /* Adjust width as needed */
   height: 500px;
   max-width: 100%;
   box-sizing: border-box;
@@ -54,9 +54,11 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.ridedetails {
+
+
+.tripdetails {
   width: 100%;
-  flex-grow: 1; /* Allow the details to grow to fill available space */
+  flex-grow: 1;
 }
 
 .bookButtonContainer {
@@ -79,10 +81,13 @@
   padding: 10px 20px;
 }
 
-.ridedetails ul {
+
+
+.tripdetails ul {
   list-style: none;
-  width: 90%;
+  width: 80%;
   font-size: medium;
+ 
 }
 
 
@@ -91,6 +96,7 @@
   justify-content: center; /* Center horizontally */
   align-items: flex-start; /* Align items to the top */
   width: 100%;
+  margin-bottom: 20px;
 }
 
 .image {
@@ -125,5 +131,29 @@
 .navButton:hover {
   background-color: #5a5a5a;
 }
+
+.cost {
+    text-align: center;
+    font-weight: bold;
+  }
+  .costContainer {
+    margin-bottom: 20px; 
+  }
+
+.dateTime {
+  display: flex;
+  font-size: large;
+  margin-bottom: 40px;
+}
+
+
+.date {
+  margin-right: 40px;
+}
+
+.time {
+  margin-left: 10px;
+}
+
 
 
