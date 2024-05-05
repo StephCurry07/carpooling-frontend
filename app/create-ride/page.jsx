@@ -654,7 +654,7 @@ const createRide = () => {
             Submit
           </button>
           {distance && (
-            <p style={styles.distance}>
+            <p className={styles.distance}>
               You will be travelling {distance} kilometers.
             </p>
           )}

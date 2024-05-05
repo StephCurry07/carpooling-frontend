@@ -52,6 +52,7 @@ const EnlargedCardModal = ({ ride, onClose }) => {
           <li><LocaltaxiIcon /> {driverDetails}</li>
           <li><HailIcon /> {pickPoint}</li>
           <li><StraightIcon /> {distance}</li>
+          <li><GroupIcon /> Max Passengers:{ride.mPassengers.toString()}</li>
         </ul>
       </div>
         <button className={styles.closeButton} onClick={onClose}>Close</button>

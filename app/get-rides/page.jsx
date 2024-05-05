@@ -153,7 +153,7 @@ const GetRides = () => {
               return source;
             })}
             renderInput={(params) => <TextField {...params} label="Select Source" variant="outlined" />}
-            sx={{ width: 400 }}
+            sx={{ width: 400}}
           />
           {/* <select
             id="sourceFilter"
