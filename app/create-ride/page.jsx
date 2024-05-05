@@ -29,7 +29,6 @@ const createRide = () => {
   const [tripDetails, setTripDetails] = useState("");
   const [acNonAc, setAcNonAc] = useState("AC");
   const [rideFare, setRideFare] = useState(0);
-  // const [mileage, setMileage] = useState(0);
   const [formData, setFormData] = useState("");
   // const [value, setValue] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
@@ -126,7 +125,7 @@ const createRide = () => {
           destination: destination
         },
         headers: {
-          'X-RapidAPI-Key': apiKey,
+          'X-RapidAPI-Key': apiKey2,
           'X-RapidAPI-Host': 'driving-distance-calculator-between-two-points.p.rapidapi.com'
         }
       };
@@ -146,16 +145,9 @@ const createRide = () => {
         method: 'POST',
         url: 'https://distanceto.p.rapidapi.com/distance/route',
         params: { car: 'true' },
-        // method: 'GET',
-        // url: 'https://driving-distance-calculator-between-two-points.p.rapidapi.com/data',
-        // params: {
-        //   origin: sourceInput,
-        //   destination: destinationInput
-        // },
         headers: {
           'content-type': 'application/json',
           'X-RapidAPI-Key': apiKey2,
-          // 'X-RapidAPI-Key': '38424df195msh9ee1dbed38d22d0p1dd980jsn41f9b6f44895',
           'X-RapidAPI-Host': 'distanceto.p.rapidapi.com'
           // J';_q$5}tR:yAG29"]nc@^
           // 'X-RapidAPI-Host': 'driving-distance-calculator-between-two-points.p.rapidapi.com'
@@ -225,7 +217,7 @@ const createRide = () => {
           method: 'GET',
           url: `https://daily-petrol-diesel-lpg-cng-fuel-prices-in-india.p.rapidapi.com/v1/fuel-prices/today/india/${State}`,
           headers: {
-            'X-RapidAPI-Key': '02c9ea6c62mshefda0d54bedaa0ep1b07dajsnf5b34ba70760',
+            'X-RapidAPI-Key': apiKey2,
             'X-RapidAPI-Host': 'daily-petrol-diesel-lpg-cng-fuel-prices-in-india.p.rapidapi.com'
           }
         };
@@ -348,7 +340,7 @@ const createRide = () => {
 
   const onPickupInputChange = (event, newInputValue) => {
     setPickupInput(newInputValue);
-    console.log(mileage);
+    // console.log(mileage);
   };
 
 
@@ -661,7 +653,11 @@ const createRide = () => {
           <button type="submit" className={`${styles.submitButton}`}>
             Submit
           </button>
-          {distance && <p>Distance: {distance} kilometers</p>}
+          {distance && (
+            <p style={styles.distance}>
+              You will be travelling {distance} kilometers.
+            </p>
+          )}
         </form>
       </div>
       {/* <script src="http://localhost:8097"></script> */}
