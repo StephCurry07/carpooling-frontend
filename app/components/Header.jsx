@@ -50,17 +50,17 @@ const Header = ({ role, balance, connectedAccount }) => {
         </div>
       </div>
       <div className="header-ele">
-        <p style={{ color: "black", textAlign: "center", fontWeight: "bold" }}>
+        <p style={{ color: "yellow", textAlign: "center", fontWeight: "bold" }}>
           Role : {role}
         </p>
       </div>
       <div className="header-ele">
-        <p style={{ color: "black", textAlign: "center", fontWeight: "bold" }}>
+        <p style={{ color: "yellow", textAlign: "center", fontWeight: "bold" }}>
           Balance : {_balance}
         </p>
       </div>
       <div className="header-ele">
-        <p style={{ color: "black", textAlign: "center", fontWeight: "bold" }}>
+        <p style={{ color: "yellow", textAlign: "center", fontWeight: "bold" }}>
           Connected Acc. : {_connectedAccount}
         </p>
       </div>

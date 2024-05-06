@@ -99,6 +99,20 @@ const PassengerRegistration = () => {
               className={styles.inputField}
             />
           </div>
+
+          <Link
+            href={{
+              pathname: "/get-rides",
+              query: {
+                connectedAccount: connectedAccount,
+                balance: balance,
+                role: "passenger",
+              },
+            }}
+            style={{ marginTop: "auto" }}
+          >
+            <button type="submit" className={`${styles.submitButton} ${styles.center__relative}`}>Submit</button>
+          </Link>
         </fieldset>
         {/* <div className={styles.formGroup}>
           
@@ -167,20 +181,6 @@ const PassengerRegistration = () => {
           />
         </div>
   */}
-  <br></br>
-          <Link
-            href={{
-              pathname: "/get-rides",
-              query: {
-                connectedAccount: connectedAccount,
-                balance: balance,
-                role: "passenger",
-              },
-            }}
-            style={{ marginTop: "auto" }}
-          >
-            <button type="submit" className={`${styles.submitButton} ${styles.center__relative}`}>Submit</button>
-          </Link>
       </form>
     </div>
   );

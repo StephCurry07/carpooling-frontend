@@ -79,6 +79,7 @@
   border: 2px solid #000000;
   border-radius: 5px;
   padding: 10px 20px;
+  cursor: pointer;
 }
 
 
@@ -120,8 +121,8 @@
 .navButton {
   margin: 0 10px;
   padding: 10px 20px;
-  background-color: #008f1a;
-  color: rgb(255, 255, 255);
+  background-color: #383838;
+  color: yellow;
   border: 2px solid #000000;
   border-radius: 5px;
   cursor: pointer;

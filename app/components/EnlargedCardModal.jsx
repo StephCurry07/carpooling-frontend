@@ -34,7 +34,7 @@ const EnlargedCardModal = ({ ride, onClose }) => {
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-        <h2>Ride Details</h2>
+        <h2><center>Ride Details</center></h2>
         <div className={styles.ridedetails}>
         <ul>
           <li><PlaceIcon /> {source}</li>

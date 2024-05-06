@@ -43,17 +43,13 @@
 }
 
 .submitButton {
-  background-color: #007bff;
-  color: white;
-  border: none;
+  background-color: #383838;
+  color: yellow;
+  border: 2px solid #000000;
   border-radius: 4px;
-  margin-top: 10px;
+  margin-top: 30px;
   padding: 10px 20px;
   cursor: pointer;
-}
-
-.submitButton:hover {
-  background-color: #0056b3;
 }
 
 .distance {
