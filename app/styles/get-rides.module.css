@@ -24,17 +24,22 @@
 }
 
 .card:hover {
-  transform: scale(1.08); /* Scale the container by 5% when hovered */
+  transform: scale(1.05); /* Scale the container by 5% when hovered */
 }
 
 
 .cardContainer {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
   margin-top: 20px;
   align-items: flex-start; /* Align items to the top */
   font-size: medium;
+  transition: transform 0.5s ease;
+}
+
+.transition {
+  overflow-x: hidden; /* Hide overflow content */
 }
 
 .card {
@@ -43,7 +48,7 @@
   padding: 10px;
   margin: 15px;
   width: 370px; /* Adjust width as needed */
-  height: 500px;
+  height: 450px;
   max-width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -155,6 +160,8 @@
 .time {
   margin-left: 10px;
 }
+
+
 
 
 
