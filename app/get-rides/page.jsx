@@ -124,8 +124,8 @@ const GetRides = () => {
       console.log(txn.toString());
 
       if (txn) {
-        alert("Transaction successful");
-        window.location.href = `/ride-booked?connectedAccount=${connectedAccount}&balance=${balance}&role=passenger`;
+        alert("Congratulations! Your ride is booked");
+        window.location.href = `/my-rides?connectedAccount=${connectedAccount}&balance=${balance}&role=passenger`;
       }
     } catch (error) {
       const decodedError = await errorDecoder.decode(error);
