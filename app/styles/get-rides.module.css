@@ -38,9 +38,6 @@
   transition: transform 0.5s ease;
 }
 
-.transition {
-  overflow-x: hidden; /* Hide overflow content */
-}
 
 .card {
   background-color: #ffffff;
