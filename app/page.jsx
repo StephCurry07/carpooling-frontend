@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import PrimaryButton from "./components/PrimaryButton";
 import Link from "next/link";
 import Image from "next/image";
-
+import styles from './styles/user-registration.module.css';
 const HomePage = () => {
   const [ethereum, setEthereum] = useState(undefined);
   const [connectedAccount, setConnectedAccount] = useState(undefined);
@@ -93,7 +93,7 @@ const HomePage = () => {
             justifyContent: "center",
           }}
         >
-          <h1>Welcome to Ride Sharing Platform</h1>
+          <h1>Welcome to EtherWheels - A Ride Sharing Platform</h1>
           <p>
             Want to do something nice for the environment and also save some
             money ? <br />
@@ -115,7 +115,7 @@ const HomePage = () => {
             justifyContent: "center",
           }}
         >
-          <h1>Welcome to Ride Sharing Platform</h1>
+          <h1>Welcome to EtherWheels</h1>
           <p>
             Great! Now you can click on the link below to Register yourselves{" "}
             <br />
