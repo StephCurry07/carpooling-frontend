@@ -157,11 +157,12 @@ const DriverRegistration = ({ data }) => {
             <label className={styles.label} >Car name</label>
             <Autocomplete
               options={carsData}
-              getOptionLabel={(option) => option.Combined_Name}
-              value={selectedCar.Combined_Name}
+              getOptionLabel={(option) => option.Combined_Name || ""}
+              defaultValue={selectedCar.Combined_Name}
               onChange={handleCarChange}
               renderInput={(params) => <TextField {...params} label="Select Car" variant="outlined" />}
               // className={styles.inputField}
+              sx={{width: '83%'}}
             />
             
           </div>

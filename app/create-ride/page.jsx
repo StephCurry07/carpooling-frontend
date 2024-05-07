@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { useState, useEffect } from "react";
 import styles from "../styles/user-registration.module.css";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
@@ -49,6 +49,7 @@ const createRide = () => {
   const [distance, setDistance] = useState(null);
   const [fuelPrice, setFuelPrice] = useState(0);
   const [FP, setFP] = useState(0);
+  const [petrolPrice, setPetrolPrice] = useState(null);
   const [exchangeRate, setExchangeRate] = useState(null);
   const mileage = formData.mileage;
   const maxPassengers = formData.carCapacity;
@@ -127,7 +128,7 @@ const createRide = () => {
           destination: destination
         },
         headers: {
-          'X-RapidAPI-Key': apiKey1,
+          'X-RapidAPI-Key': apiKey,
           'X-RapidAPI-Host': 'driving-distance-calculator-between-two-points.p.rapidapi.com'
         }
       };
@@ -227,8 +228,8 @@ const createRide = () => {
         try {
           const response = await axios.request(options);
           if (formData.fuel_type === 'Petrol') {
+            setPetrolPrice(response.data.fuel.petrol.retailPrice);
             setFuelPrice(response.data.fuel.petrol.retailPrice);
-            console.log('yes');
           }
           else if (formData.fuel_type === 'Diesel') {
             setFuelPrice(response.data.fuel.diesel.retailPrice)
@@ -242,13 +243,10 @@ const createRide = () => {
         }
 
       };
-      if (formData.fuel_type === 'Electric') {
-        setFuelPrice(0.5);
-      }
-      //CALC FARE FOR HYBRID DIRECTLY... NO OTHER METHOD SUITABLE AS FUEL PRICE NEEDS TO BE ADJUSTED (SEE LATER)
-      else {
+      if (formData.fuel_type !== 'Electric') {
         fetchFuelPrice();
       }
+      //CALC FARE FOR HYBRID DIRECTLY... NO OTHER METHOD SUITABLE AS FUEL PRICE NEEDS TO BE ADJUSTED (SEE LATER)
     }
   }, [state]);
 
@@ -257,20 +255,35 @@ const createRide = () => {
     const calcFare = () => {
       if (mileage && exchangeRate) {
         const fuelPriceUSD = fuelPrice / exchangeRate;
-        console.log("Fuel Price: ", fuelPrice);
-        console.log("er: ", exchangeRate);
-        console.log("FuelpriceUSD: ", fuelPriceUSD);
-        console.log("Mileage: ", mileage);
-        console.log("Distance: ", distance);
-        setFP(fuelPriceUSD);
-        const fare = (distance / mileage) * fuelPriceUSD;
-        // const fare = (1000 / mileage) * fuelPriceUSD;
-        setRideFare(fare);
-        console.log("Fare: ", fare);
+        if (formData.fuel_type === 'Electric') {
+          const fare = Math.max(3, distance * (9/exchangeRate));      //9 rs per km, min 3 dollars
+          setRideFare(fare);
+          setFP("₹9/km");
+          console.log("Fare for Electric: ", fare);
+        }
+        else if (formData.fuel_type === 'Hybrid') {
+          const fare = (0.7 * (distance / mileage) * fuelPriceUSD) + (0.3 * Math.max(3, distance * (9/exchangeRate)));  // 70% F + 30% E
+          // const fare = Math.max(3, (0.7 * 1000 / mileage * fuelPriceUSD) + (0.3 * Math.max(3, distance * (9/exchangeRate))));
+          setFP((0.7 * petrolPrice) + " + ₹9/km");
+          console.log("Fare for Hybrid: ", fare);
+          setRideFare(fare);
+        }
+        else{
+          // console.log("Fuel Price: ", fuelPrice);
+          // console.log("er: ", exchangeRate);
+          // console.log("FuelpriceUSD: ", fuelPriceUSD);
+          // console.log("Mileage: ", mileage);
+          // console.log("Distance: ", distance);
+          setFP(fuelPrice);
+          const fare = (distance / mileage) * fuelPriceUSD;
+          // const fare = Math.max(4, (1000 / mileage) * fuelPriceUSD);
+          setRideFare(fare);
+          console.log("Fare for fuel vehicles: ", fare);
+        }
       }
     };
     calcFare();
-  }, [distance, fuelPrice, exchangeRate]);
+  }, [distance]);
 
   const handleChangeRad = (e) => {
     setAcNonAc(e.target.value);
@@ -334,24 +347,24 @@ const createRide = () => {
       console.error("Selected time is null. Please select a valid time.");
       return;
     }
+      try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        const CarPoolingContract = new ethers.Contract(
+          contractAddress,
+          contractABI,
+          signer
+        );
 
-    try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
-      const CarPoolingContract = new ethers.Contract(
-        contractAddress,
-        contractABI,
-        signer
-      );
-
-      console.log(tripDetails);
-      await CarPoolingContract.createRide(
-        maxPassengers,
-        BigInt(Math.round(rideFare)),
-        BigInt(secondsSinceEpoch),
-        tripDetails
-      );
+        console.log(tripDetails);
+        await CarPoolingContract.createRide(
+          maxPassengers,
+          BigInt(Math.ceil(rideFare)),
+          BigInt(secondsSinceEpoch),
+          tripDetails
+        );
       alert("Ride created successfully!");
+
     } catch (error) {
       console.log("Error creating ride:", error);
     }
@@ -682,7 +695,7 @@ const createRide = () => {
                   maxDate={new Date(new Date().setDate(new Date().getDate() + 2))}
                   onChange={(newValue) => handleDateChange(newValue)}
                   TextField={(params) => <TextField {...params} variant="outlined" />}
-                  sx={{width:'90%'}}
+                  // sx={{width:'90%'}}
                 />
               </div>
 
@@ -693,7 +706,7 @@ const createRide = () => {
                   value={selectedTime}
                   onChange={(newValue) => handleTimeChange(newValue)}
                   TextField={(params) => <TextField {...params} variant="outlined" />}
-                  sx={{width:'90%'}}
+                  // sx={{width:'90%'}}
                 />
               </div>
             </div>
@@ -702,7 +715,7 @@ const createRide = () => {
               sx={{ width: 400 }} /> */}
           </div>
           <br />
-          <button type="submit" className={`${styles.submitButton} ${styles.center__relative}`}>
+          <button type="submit" className={`${styles.submitButton} ${styles.center__relativedriver}`}>
             Submit
           </button>
           {/* {distance && ( */}
