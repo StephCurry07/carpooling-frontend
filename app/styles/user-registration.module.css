@@ -7,6 +7,8 @@
 
 .formGroup {
   margin-bottom: 10px;
+  margin-left: 60px;
+  padding-left: 20px;
 }
 
 .label {
@@ -19,6 +21,13 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.center__relativedriver {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-80%, -50%);
 }
 
 .inputField {
