@@ -128,7 +128,7 @@ const createRide = () => {
           destination: destination
         },
         headers: {
-          'X-RapidAPI-Key': apiKey,
+          'X-RapidAPI-Key': apiKey2,
           'X-RapidAPI-Host': 'driving-distance-calculator-between-two-points.p.rapidapi.com'
         }
       };
@@ -283,7 +283,7 @@ const createRide = () => {
       }
     };
     calcFare();
-  }, [distance]);
+  }, [distance, fuelPrice]);
 
   const handleChangeRad = (e) => {
     setAcNonAc(e.target.value);
@@ -695,7 +695,7 @@ const createRide = () => {
                   maxDate={new Date(new Date().setDate(new Date().getDate() + 2))}
                   onChange={(newValue) => handleDateChange(newValue)}
                   TextField={(params) => <TextField {...params} variant="outlined" />}
-                  // sx={{width:'90%'}}
+                  sx={{width:'100%'}}
                 />
               </div>
 
@@ -706,7 +706,7 @@ const createRide = () => {
                   value={selectedTime}
                   onChange={(newValue) => handleTimeChange(newValue)}
                   TextField={(params) => <TextField {...params} variant="outlined" />}
-                  // sx={{width:'90%'}}
+                  sx={{width:'100%'}}
                 />
               </div>
             </div>
