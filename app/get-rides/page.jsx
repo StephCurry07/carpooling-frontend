@@ -230,7 +230,7 @@ const GetRides = () => {
           /> */}
         </div>
       </div>
-      <div className={styles.cardContainer} ref={containerRef}>
+      <div className={styles.cardContainer}>
         {filteredRides.slice(currentPage * 3, (currentPage + 1) * 3).map((ride) => (
           <GetRidesCard key={ride.rideId} ride={ride} bookRide={bookRide} exchangeRate={exchangeRate} />
         ))}
