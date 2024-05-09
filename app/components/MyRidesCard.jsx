@@ -21,9 +21,9 @@ const MyRidesCard = ({ ride, cancelRide, completed, role, exchangeRate }) => {
     (parseFloat(ride.rideFare) / 1e18) * exchangeRate.USD
   );
   console.log(ride.rideId, fareInUSD);
+  const n = parseInt(ride.passengers);
   const totalFare =
-    role === "driver" ? fareInUSD * parseInt(ride.passengers) : fareInUSD;
-
+  (role === "driver" ? (fareInUSD * n/(n+1)).toFixed(2) : (fareInUSD * 1/(n+1)).toFixed(2));
   const cancelRideHandler = async () => {
     await cancelRide(ride.rideId);
   };

@@ -91,6 +91,7 @@ const HomePage = () => {
             flexDirection: "column",
             alignItems: "flex-start",
             justifyContent: "center",
+            marginLeft:"30px",
           }}
         >
           <h1>Welcome to EtherWheels - A Ride Sharing Platform</h1>

@@ -150,7 +150,7 @@ const createRide = () => {
         params: { car: 'true' },
         headers: {
           'content-type': 'application/json',
-          'X-RapidAPI-Key': apiKey2,
+          'X-RapidAPI-Key': apiKey,
           'X-RapidAPI-Host': 'distanceto.p.rapidapi.com'
           // J';_q$5}tR:yAG29"]nc@^
           // 'X-RapidAPI-Host': 'driving-distance-calculator-between-two-points.p.rapidapi.com'
@@ -397,7 +397,7 @@ const createRide = () => {
             radius: '500',
           },
           headers: {
-            'X-RapidAPI-Key': apiKey,
+            'X-RapidAPI-Key': apiKey2,
             'X-RapidAPI-Host': 'place-autocomplete1.p.rapidapi.com',
           },
         };
@@ -421,7 +421,7 @@ const createRide = () => {
           radius: '500',
         },
         headers: {
-          'X-RapidAPI-Key': apiKey1,
+          'X-RapidAPI-Key': apiKey2,
           'X-RapidAPI-Host': 'place-autocomplete1.p.rapidapi.com',
         },
       };
@@ -469,8 +469,8 @@ const createRide = () => {
 
   //UNCOMMENT WHEN DONE.... FOR REDUCTION IN API USAGE
   useEffect(() => {
-    if (pickupInput && destinationInput) {
-      calcDistance(pickupInput, destinationInput);
+    if (sourceInput && destinationInput) {
+      calcDistance1(sourceInput, destinationInput);
     }
   }, [pickupInput, destinationInput]);
 
